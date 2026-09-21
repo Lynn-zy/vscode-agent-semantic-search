@@ -35,9 +35,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(statusBar.registerMenuCommand());
 
   // 4. 初始化并注册 LanguageModelTool
-  const semanticTool = new SemanticSearchTool(relay, (outcomeState) => {
-    statusBar.updateState(outcomeState);
-  });
+  const semanticTool = new SemanticSearchTool(relay);
 
   const toolRegistration = vscode.lm.registerTool(TOOL_NAME, semanticTool);
   context.subscriptions.push(toolRegistration);

@@ -62,7 +62,7 @@ export function registerBuildIndexCommand(
       logger.info("底层代码库索引构建任务已完成。");
       statusBar?.updateState("idle");
     } catch (error) {
-      statusBar?.updateState("failed");
+      statusBar?.updateState("idle");
       const msg = `触发构建索引时发生异常: ${error instanceof Error ? error.message : String(error)}`;
       logger.error(msg, error);
       void vscode.window.showErrorMessage(msg);

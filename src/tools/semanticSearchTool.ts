@@ -17,16 +17,10 @@ import {
  */
 export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSearchInput> {
   /**
-   * 构造函数：注入中继执行器及状态回调
+   * 构造函数：注入中继执行器
    * @param relay 中继核心实例
-   * @param onOutcomeStatus 状态变更回调
    */
-  constructor(
-    private readonly relay: SemanticSearchRelay,
-    private readonly onOutcomeStatus?: (
-      status: "ok" | "empty" | "failed",
-    ) => void,
-  ) {}
+  constructor(private readonly relay: SemanticSearchRelay) {}
 
   /**
    * 执行工具调用入口
@@ -47,14 +41,12 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
     );
 
     if (outcome.status === "ok") {
-      this.onOutcomeStatus?.("ok");
       return new vscode.LanguageModelToolResult([
         new vscode.LanguageModelTextPart(outcome.markdown),
       ]);
     }
 
     if (outcome.status === "empty") {
-      this.onOutcomeStatus?.("empty");
       const emptyNote = [
         "【语义检索未返回匹配代码】",
         ...outcome.notes,
@@ -72,7 +64,6 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
     }
 
     // outcome.status === 'failed'
-    this.onOutcomeStatus?.("failed");
     const failureMessage = formatDegradationHint(
       outcome.failure,
       outcome.query,

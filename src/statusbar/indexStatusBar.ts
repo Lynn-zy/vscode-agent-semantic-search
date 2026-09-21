@@ -13,9 +13,9 @@ import {
 import { ConfigService } from "../config/configService";
 
 /**
- * 状态栏状态枚举
+ * 状态栏状态枚举：仅保留就绪态与构建中态
  */
-export type StatusBarState = "idle" | "indexing" | "ok" | "empty" | "failed";
+export type StatusBarState = "idle" | "indexing";
 
 /**
  * 快速选择菜单项接口定义
@@ -63,25 +63,10 @@ export class IndexStatusBar implements vscode.Disposable {
         this.statusBarItem.text = "$(sync~spin) 语义搜索: 构建索引中";
         this.statusBarItem.tooltip = "正在构建工作区代码库索引，请稍候...";
         break;
-      case "ok":
-        this.statusBarItem.text = "$(check) 语义搜索: 正常";
-        this.statusBarItem.tooltip =
-          "最近一次语义检索调用正常。点击打开管理菜单。";
-        break;
-      case "empty":
-        this.statusBarItem.text = "$(info) 语义搜索: 无匹配";
-        this.statusBarItem.tooltip =
-          "最近一次语义检索未匹配到相关代码片段。点击打开管理菜单。";
-        break;
-      case "failed":
-        this.statusBarItem.text = "$(warning) 语义搜索: 异常";
-        this.statusBarItem.tooltip =
-          "最近一次检索出现错误或超时。点击打开管理菜单。";
-        break;
       case "idle":
       default:
         this.statusBarItem.text = "$(search) 语义搜索";
-        this.statusBarItem.tooltip = "Agent 语义检索已就绪。点击打开管理菜单。";
+        this.statusBarItem.tooltip = "Agent 语义检索就绪。点击打开管理菜单。";
         break;
     }
 

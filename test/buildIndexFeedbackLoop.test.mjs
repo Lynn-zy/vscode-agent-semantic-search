@@ -75,7 +75,7 @@ test("Bug Regression 1: 当触发构建代码库索引且底层构建未完成�
   }
 });
 
-test("Bug Regression 2: 当底层构建索引发生异常时，状态栏应切换为 failed 异常状态", async () => {
+test("Bug Regression 2: 当底层构建索引发生异常时，状态栏应安全复位退出 indexing 状态", async () => {
   vscode.commands._clear();
 
   const statusBar = new IndexStatusBar();
@@ -104,9 +104,14 @@ test("Bug Regression 2: 当底层构建索引发生异常时，状态栏应切�
 
     const item = statusBar.statusBarItem;
     assert.equal(
-      item.text.includes("异常") || item.text.includes("$(warning)"),
+      item.text.includes("$(sync~spin)"),
+      false,
+      `构建抛出异常后状态栏应退出转圈构建中状态，当前 text: ${item.text}`,
+    );
+    assert.equal(
+      item.text.includes("$(search) 语义搜索"),
       true,
-      `构建抛出异常后状态栏应为 failed 状态，当前 text: ${item.text}`,
+      `构建抛出异常后状态栏应复位为 idle 就绪态，当前 text: ${item.text}`,
     );
   } finally {
     commandDisposable.dispose();
