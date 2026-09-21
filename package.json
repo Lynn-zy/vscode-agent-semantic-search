@@ -1,0 +1,110 @@
+{
+  "name": "vscode-agent-semantic-search",
+  "displayName": "Agent Semantic Search Bridge",
+  "description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（semantic_search）",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguageModelTool:workspace_semantic_search"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languageModelTools": [
+      {
+        "name": "workspace_semantic_search",
+        "toolReferenceName": "semanticSearch",
+        "displayName": "工作区代码语义检索",
+        "icon": "$(search)",
+        "modelDescription": "按语义与概念检索当前工作区代码，返回高相关度的文件代码片段。当你知道功能意图或业务逻辑、但不知道具体函数名或文件名时使用此工具。不要在已知确定文件路径或已知精确关键词时使用。",
+        "userDescription": "允许 Agent 使用语义搜索检索工作区代码片段。",
+        "canBeReferencedInPrompt": true,
+        "tags": [
+          "codesearch"
+        ],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "自然语言查询或概念描述，例如：'用户登录权限校验逻辑'、'WebSocket 重连机制'。"
+            },
+            "scopedDirectories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "可选参数：限定检索的文件目录范围（相对路径或绝对路径）。若未提供则检索整个工作区。"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "semanticSearch.buildIndex",
+        "title": "语义搜索：构建工作区代码库索引",
+        "category": "Semantic Search"
+      },
+      {
+        "command": "semanticSearch.collectIndexDiagnostics",
+        "title": "语义搜索：收集工作区索引诊断信息",
+        "category": "Semantic Search"
+      },
+      {
+        "command": "semanticSearch.showMenu",
+        "title": "语义搜索：打开管理菜单",
+        "category": "Semantic Search"
+      }
+    ],
+    "configuration": {
+      "title": "Semantic Search",
+      "properties": {
+        "semanticSearch.statusBar.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否在状态栏右下角显示语义搜索状态与一键构建索引入口。"
+        },
+        "semanticSearch.timeoutMs": {
+          "type": "number",
+          "default": 45000,
+          "minimum": 5000,
+          "maximum": 180000,
+          "description": "单次中继检索的超时时限（毫秒）。建议设置在 30000~60000 毫秒之间。"
+        },
+        "semanticSearch.showDegradationHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "当结果为空或索引未就绪时，是否自动向 Agent 返回下一步排查与降级建议（建议调用 grep_search 或 file_search）。"
+        },
+        "semanticSearch.relayToolId": {
+          "type": "string",
+          "default": "copilot_searchCodebase",
+          "description": "底层中继目标工具的注册 ID。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "prettier": "^3.9.8",
+    "typescript": "^5.4.5"
+  }
+}
