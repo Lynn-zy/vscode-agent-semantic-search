@@ -44,7 +44,9 @@ export function activate(context: vscode.ExtensionContext): void {
   logger.info(`已成功注册语言模型工具: ${TOOL_NAME}`);
 
   // 5. 注册命令处理程序
-  context.subscriptions.push(registerBuildIndexCommand(commandHost, logger));
+  context.subscriptions.push(
+    registerBuildIndexCommand(commandHost, logger, statusBar),
+  );
   context.subscriptions.push(registerDiagnosticsCommand(commandHost, logger));
 
   // 6. 监听配置项变更以动态刷新状态栏显示
