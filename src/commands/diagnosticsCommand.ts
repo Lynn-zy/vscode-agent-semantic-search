@@ -1,6 +1,6 @@
 /**
  * @file diagnosticsCommand.ts
- * @description 收集语义索引诊断信息命令处理器
+ * @description 收集代码库索引诊断信息命令处理器
  */
 
 import * as vscode from "vscode";

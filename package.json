@@ -1,7 +1,7 @@
 {
   "name": "vscode-agent-semantic-search",
   "displayName": "Agent Semantic Search Bridge",
-  "description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（semantic_search）",
+  "description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（workspace_semantic_search）",
   "version": "0.1.0",
   "publisher": "local",
   "engines": {
@@ -86,7 +86,7 @@
         "semanticSearch.showDegradationHints": {
           "type": "boolean",
           "default": true,
-          "description": "当结果为空或索引未就绪时，是否自动向 Agent 返回下一步排查与降级建议（建议调用 grep_search 或 file_search）。"
+          "description": "当结果为空或检索失败时，是否向 Agent 附带下一步排查与降级建议（建议改用 grep_search 或 file_search）。"
         },
         "semanticSearch.relayToolId": {
           "type": "string",

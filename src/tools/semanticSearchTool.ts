@@ -7,7 +7,10 @@ import * as vscode from "vscode";
 import { SemanticSearchInput } from "../types";
 import { ConfigService } from "../config/configService";
 import { SemanticSearchRelay } from "../relay/semanticSearchRelay";
-import { formatDegradationHint } from "../relay/relayFailure";
+import {
+  DEGRADATION_SUGGESTION_TITLE,
+  formatDegradationHint,
+} from "../relay/relayFailure";
 
 /**
  * 语义检索工具类：实现 VS Code LanguageModelTool 规范接口
@@ -57,7 +60,7 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
         ...outcome.notes,
         "",
         config.showDegradationHints
-          ? "💡 建议：\n1. 如果需要精确搜索，请立即改用 `grep_search` 或 `file_search`。\n2. 如需构建语义索引，用户可通过命令面板执行「语义搜索：构建工作区代码库索引」。"
+          ? `${DEGRADATION_SUGGESTION_TITLE}\n1. 如果需要精确搜索，请立即改用 \`grep_search\` 或 \`file_search\`。\n2. 如需构建代码库索引，用户可通过命令面板执行「语义搜索：构建工作区代码库索引」。`
           : "",
       ]
         .filter(Boolean)
@@ -70,12 +73,13 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
 
     // outcome.status === 'failed'
     this.onOutcomeStatus?.("failed");
-    const degradationMessage = formatDegradationHint(
+    const failureMessage = formatDegradationHint(
       outcome.failure,
       outcome.query,
+      config.showDegradationHints,
     );
     return new vscode.LanguageModelToolResult([
-      new vscode.LanguageModelTextPart(degradationMessage),
+      new vscode.LanguageModelTextPart(failureMessage),
     ]);
   }
 

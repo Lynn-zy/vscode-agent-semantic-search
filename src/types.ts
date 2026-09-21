@@ -83,7 +83,7 @@ export interface ExtensionConfig {
   readonly statusBarEnabled: boolean;
 
   /**
-   * 是否在检索为空或出错时自动附加降级引导提示
+   * 结果为空或检索失败时，是否向模型附带降级提示的建议段
    */
   readonly showDegradationHints: boolean;
 

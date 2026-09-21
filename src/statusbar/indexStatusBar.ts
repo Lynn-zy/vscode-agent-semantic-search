@@ -95,7 +95,7 @@ export class IndexStatusBar implements vscode.Disposable {
         {
           id: "buildIndex",
           label: "$(database) 构建工作区代码库索引",
-          description: "触发 Copilot 建立当前工作区的语义向量索引",
+          description: "触发 Copilot 构建当前工作区的代码库索引",
         },
         {
           id: "diagnostics",

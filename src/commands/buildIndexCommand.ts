@@ -1,6 +1,6 @@
 /**
  * @file buildIndexCommand.ts
- * @description 构建工作区语义索引命令处理器
+ * @description 构建代码库索引命令处理器
  */
 
 import * as vscode from "vscode";
@@ -22,7 +22,7 @@ export function registerBuildIndexCommand(
   logger: LogService,
 ): vscode.Disposable {
   return vscode.commands.registerCommand(COMMAND_BUILD_INDEX, async () => {
-    logger.info("收到用户触发构建工作区代码库语义索引命令。");
+    logger.info("收到用户触发构建代码库索引命令。");
 
     try {
       const registeredCommands = await commandHost.listCommands();

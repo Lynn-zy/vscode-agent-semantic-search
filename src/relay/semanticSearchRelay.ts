@@ -20,6 +20,32 @@ import { createRelayFailure } from "./relayFailure";
 import { LogService } from "../log/output";
 
 /**
+ * 底层语义检索不可用时返回的提示句
+ * 注：中继端口只暴露 content 部件，没有结构化状态字段，未就绪只能按返回文本判定
+ */
+const NOT_READY_NOTICE = "not currently available";
+
+/**
+ * 单句通知的体量上界（字符数）
+ * 注：用于把「不可用通知」与「真实检索结果」区分开，真实检索结果必然远超此体量；
+ * 否则在本仓库内检索该提示句自身时，会把一次正常命中误判为未就绪
+ */
+const NOT_READY_NOTICE_MAX_LENGTH = 200;
+
+/**
+ * 判定返回内容整体是否为「语义检索不可用」通知
+ * @param content 规整后的返回文本
+ * @returns true 表示该内容是不可用通知而非检索结果
+ */
+function isNotReadyNotice(content: string): boolean {
+  const trimmed = content.trim();
+  return (
+    trimmed.includes(NOT_READY_NOTICE) &&
+    trimmed.length <= NOT_READY_NOTICE_MAX_LENGTH
+  );
+}
+
+/**
  * 语义检索中继编排服务
  */
 export class SemanticSearchRelay {
@@ -227,18 +253,14 @@ export class SemanticSearchRelay {
       this.logger?.error(`中继底层调用异常: ${errorMessage}`, error);
 
       // 若底层明确提示未就绪/不可用，映射为 not-ready 失败类型
-      if (
-        errorMessage.includes("not currently available") ||
-        errorMessage.includes("not available") ||
-        errorMessage.includes("未就绪")
-      ) {
+      if (errorMessage.includes(NOT_READY_NOTICE)) {
         return {
           status: "failed",
           query,
           failure: createRelayFailure(
             "not-ready",
             `底层 Copilot 语义检索服务尚未就绪或不可用: ${errorMessage}`,
-            "建议执行「语义搜索：构建工作区代码库索引」命令，或改用 grep_search 精确检索。",
+            combinedDirNote,
           ),
         };
       }
@@ -262,12 +284,7 @@ export class SemanticSearchRelay {
     const markdownContent = adaptContentToMarkdown(rawResult.content);
 
     // 步骤六：空结果或未就绪判定
-    if (
-      markdownContent.includes(
-        "Semantic workspace search is not currently available",
-      ) ||
-      markdownContent.includes("not currently available")
-    ) {
+    if (isNotReadyNotice(markdownContent)) {
       this.logger?.warn("底层 Copilot 返回语义检索当前不可用信息。");
       return {
         status: "failed",
@@ -275,7 +292,7 @@ export class SemanticSearchRelay {
         failure: createRelayFailure(
           "not-ready",
           "底层 Copilot 报告工作区语义检索尚未就绪或当前不可用。",
-          "请通过命令面板执行「语义搜索：构建工作区代码库索引」生成索引，或改用 grep_search 检索。",
+          combinedDirNote,
         ),
       };
     }
@@ -290,7 +307,7 @@ export class SemanticSearchRelay {
         status: "empty",
         query,
         notes: [
-          "检索未返回任何有效代码片段。可能工作区尚未完成向量索引，或未匹配到足够相似度的代码。",
+          "检索未返回任何有效代码片段。可能工作区尚未构建代码库索引，或未匹配到足够相似度的代码。",
           combinedDirNote ?? "",
         ].filter(Boolean),
       };
