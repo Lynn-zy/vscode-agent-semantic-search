@@ -37,7 +37,7 @@
   - `toolResolver.ts`：按候选列表解析底层工具，包含严格的自引用排除守卫（防止递归调用自身），支持注册名与 `toolReferenceName` 兜底；
   - `semanticSearchRelay.ts`：编排参数规整（剥离 `#codebase`）、目录范围判定、带 `CancellationTokenSource` 的超时中继调用；修复了超时与外层取消的竞态判定；对未就绪状态映射为 `not-ready`；
   - `resultAdapter.ts`：深度遍历多态 `PromptTsx` AST 树（容纳 48 层嵌套组件深度），100% 无损原样透传底层代码正文，不实施人为字符截断（见 ADR-0003）；
-  - `relayFailure.ts`：根据失败类型格式化可执行的降级提示（建议 Agent 改用 `grep_search` / `file_search`，避免陷入重试死循环）。
+  - `outcomePresenter.ts`：检索终态呈现深模块，统一将命中、无匹配与失败三种终态格式化为模型可读的 Markdown 文本与确定性降级提示。
 - `tools/semanticSearchTool.ts`：实现 `vscode.LanguageModelTool<SemanticSearchInput>`，包含防御性 `prepareInvocation`。
 - `statusbar/indexStatusBar.ts`：右下角状态栏快捷入口与管理菜单，采用极简双状态模型（`idle` 与 `indexing`，见 ADR-0004），使用稳定枚举 `id` 派发命令。
 - `commands/`：
@@ -89,7 +89,7 @@
 
 ### 4.2 潜在优化与待完善项
 
-1. **单元测试补齐**：当前项目缺乏自动化测试。`toolResolver.ts`、`resultAdapter.ts`、`relayFailure.ts` 为纯逻辑函数，建议引入测试框架（如 `vitest` 或 `@vscode/test-electron`）；
+1. **单元测试补齐**：当前项目缺乏自动化测试。`toolResolver.ts`、`resultAdapter.ts`、`outcomePresenter.ts` 为纯逻辑函数，建议引入测试框架（如 `vitest` 或 `@vscode/test-electron`）；
 2. **工作区目录边界安全校验**：在 `semanticSearchRelay.ts` 中针对绝对路径入参增加与当前工作区文件夹前缀比对，收敛非工作区路径；
 3. **输出可观测性增强**：在日常使用中如遇到底层不可用，可通过状态栏管理菜单点击“收集索引诊断信息”，在输出面板查看详细指标。
 

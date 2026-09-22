@@ -16,7 +16,6 @@ import {
 import { ToolHost } from "./ports";
 import { ToolResolver } from "./toolResolver";
 import { adaptContentToMarkdown } from "./resultAdapter";
-import { createRelayFailure } from "./relayFailure";
 import { LogService } from "../log/output";
 
 /**
@@ -155,10 +154,10 @@ export class SemanticSearchRelay {
       return {
         status: "failed",
         query: "",
-        failure: createRelayFailure(
-          "invalid-input",
-          "检索查询 query 不能为空，请输入自然语言描述。",
-        ),
+        failure: {
+          kind: "invalid-input",
+          message: "检索查询 query 不能为空，请输入自然语言描述。",
+        },
       };
     }
 
@@ -176,11 +175,11 @@ export class SemanticSearchRelay {
       return {
         status: "failed",
         query,
-        failure: createRelayFailure(
-          "tool-missing",
-          `未检测到底层 Copilot 语义检索工具（候选：${candidateList.join(", ")}）。`,
-          "请确认已安装 GitHub Copilot 并开启相关功能。",
-        ),
+        failure: {
+          kind: "tool-missing",
+          message: `未检测到底层 Copilot 语义检索工具（候选：${candidateList.join(", ")}）。`,
+          details: "请确认已安装 GitHub Copilot 并开启相关功能。",
+        },
       };
     }
 
@@ -234,11 +233,11 @@ export class SemanticSearchRelay {
         return {
           status: "failed",
           query,
-          failure: createRelayFailure(
-            "timeout",
-            `语义检索超时（耗时超过 ${config.timeoutMs} 毫秒）。`,
-            combinedDirNote,
-          ),
+          failure: {
+            kind: "timeout",
+            message: `语义检索超时（耗时超过 ${config.timeoutMs} 毫秒）。`,
+            details: combinedDirNote,
+          },
         };
       }
 
@@ -257,22 +256,22 @@ export class SemanticSearchRelay {
         return {
           status: "failed",
           query,
-          failure: createRelayFailure(
-            "not-ready",
-            `底层 Copilot 语义检索服务尚未就绪或不可用: ${errorMessage}`,
-            combinedDirNote,
-          ),
+          failure: {
+            kind: "not-ready",
+            message: `底层 Copilot 语义检索服务尚未就绪或不可用: ${errorMessage}`,
+            details: combinedDirNote,
+          },
         };
       }
 
       return {
         status: "failed",
         query,
-        failure: createRelayFailure(
-          "relay-error",
-          `底层调用发生异常: ${errorMessage}`,
-          combinedDirNote,
-        ),
+        failure: {
+          kind: "relay-error",
+          message: `底层调用发生异常: ${errorMessage}`,
+          details: combinedDirNote,
+        },
       };
     } finally {
       clearTimeout(timeoutHandle);
@@ -292,11 +291,11 @@ export class SemanticSearchRelay {
       return {
         status: "failed",
         query,
-        failure: createRelayFailure(
-          "not-ready",
-          "底层 Copilot 报告工作区语义检索尚未就绪或当前不可用。",
-          combinedDirNote,
-        ),
+        failure: {
+          kind: "not-ready",
+          message: "底层 Copilot 报告工作区语义检索尚未就绪或当前不可用。",
+          details: combinedDirNote,
+        },
       };
     }
 
@@ -309,10 +308,7 @@ export class SemanticSearchRelay {
       return {
         status: "empty",
         query,
-        notes: [
-          "检索未返回任何有效代码片段。可能工作区尚未构建代码库索引，或未匹配到足够相似度的代码。",
-          combinedDirNote ?? "",
-        ].filter(Boolean),
+        dirNote: combinedDirNote,
       };
     }
 

@@ -7,10 +7,7 @@ import * as vscode from "vscode";
 import { SemanticSearchInput } from "../types";
 import { ConfigService } from "../config/configService";
 import { SemanticSearchRelay } from "../relay/semanticSearchRelay";
-import {
-  DEGRADATION_SUGGESTION_TITLE,
-  formatDegradationHint,
-} from "../relay/relayFailure";
+import { presentOutcome } from "../relay/outcomePresenter";
 
 /**
  * 语义检索工具类：实现 VS Code LanguageModelTool 规范接口
@@ -40,37 +37,11 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
       options.toolInvocationToken,
     );
 
-    if (outcome.status === "ok") {
-      return new vscode.LanguageModelToolResult([
-        new vscode.LanguageModelTextPart(outcome.markdown),
-      ]);
-    }
+    // 经由呈现深模块统一规整为面向模型的 Markdown 纯文本
+    const markdown = presentOutcome(outcome, config);
 
-    if (outcome.status === "empty") {
-      const emptyNote = [
-        "[Semantic Search: No matching code found]",
-        ...outcome.notes,
-        "",
-        config.showDegradationHints
-          ? `${DEGRADATION_SUGGESTION_TITLE}\n1. If exact matches are needed, immediately switch to \`grep_search\` or \`file_search\`.\n2. To build the codebase index, run 'Semantic Search: Build Codebase Index' via the command palette.`
-          : "",
-      ]
-        .filter(Boolean)
-        .join("\n");
-
-      return new vscode.LanguageModelToolResult([
-        new vscode.LanguageModelTextPart(emptyNote),
-      ]);
-    }
-
-    // outcome.status === 'failed'
-    const failureMessage = formatDegradationHint(
-      outcome.failure,
-      outcome.query,
-      config.showDegradationHints,
-    );
     return new vscode.LanguageModelToolResult([
-      new vscode.LanguageModelTextPart(failureMessage),
+      new vscode.LanguageModelTextPart(markdown),
     ]);
   }
 

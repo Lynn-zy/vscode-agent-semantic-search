@@ -60,7 +60,7 @@ export type SearchOutcome =
   | {
       readonly status: "empty";
       readonly query: string;
-      readonly notes: readonly string[];
+      readonly dirNote?: string;
     }
   | {
       readonly status: "failed";

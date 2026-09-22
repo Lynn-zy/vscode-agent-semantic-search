@@ -6,6 +6,21 @@
 
 ---
 
+## [0.1.1] - 2026-09-22
+
+### 重构与优化 (Refactored)
+
+- **收敛终态呈现为单一深模块 (`outcomePresenter`)**：
+  - 新增纯函数深模块 `src/relay/outcomePresenter.ts`，统一集中持有 `ok`、`empty`、`failed` 三类终态的呈现逻辑与降级提示；
+  - 纯化 `SearchOutcome.empty` 领域契约，由硬编码中文数组重构为纯结构化数据 `{ query, dirNote }`；
+  - 消除跨目录分散的降级提示与中英文混杂，规范化面向 Agent 模型的英文排查与命令引导文本；
+  - 移除纯做字段浅透传的浅模块 `src/relay/relayFailure.ts` 与 `createRelayFailure` 函数；
+  - 将 `SemanticSearchTool` 精简退化为极薄的 VS Code 宿主接口适配器。
+- **自动化测试增强**：
+  - 新增 `test/outcomePresenter.test.mjs`，包含 9 个脱离 VS Code Mock 依赖的纯逻辑单元测试，全量测试用例扩充至 17 项并全数通过。
+
+---
+
 ## [0.1.0] - 2026-09-22
 
 ### 新增特性 (Added)
