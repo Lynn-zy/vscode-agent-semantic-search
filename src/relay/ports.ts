@@ -15,6 +15,11 @@ export interface ToolDescriptor {
   readonly name: string;
 
   /**
+   * 工具在提示词中引用的别名（若有）
+   */
+  readonly toolReferenceName?: string;
+
+  /**
    * 工具入参的 JSON Schema
    */
   readonly inputSchema?: unknown;

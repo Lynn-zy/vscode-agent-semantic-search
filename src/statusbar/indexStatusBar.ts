@@ -44,6 +44,13 @@ export class IndexStatusBar implements vscode.Disposable {
   }
 
   /**
+   * 当前状态栏所处的领域状态（只读，供测试与状态观察）
+   */
+  public get state(): StatusBarState {
+    return this.currentState;
+  }
+
+  /**
    * 更新状态栏显示外观与提示（支持保持历史状态动态刷新）
    * @param state 可选的目标状态；若缺省则使用当前已持有的状态进行重绘
    */

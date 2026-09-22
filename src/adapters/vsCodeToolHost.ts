@@ -16,6 +16,8 @@ export class VsCodeToolHost implements ToolHost {
   public listTools(): readonly ToolDescriptor[] {
     return vscode.lm.tools.map((tool) => ({
       name: tool.name,
+      toolReferenceName: (tool as { toolReferenceName?: string })
+        .toolReferenceName,
       inputSchema: tool.inputSchema,
     }));
   }

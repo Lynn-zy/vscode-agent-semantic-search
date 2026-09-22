@@ -47,7 +47,6 @@ export function registerBuildIndexCommand(
       );
 
       if (!matchedCommand) {
-        statusBar?.updateState("idle");
         const candidatesStr = BUILD_INDEX_COMMAND_CANDIDATES.join(" | ");
         const warning = vscode.l10n.t(
           "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.",
@@ -63,9 +62,7 @@ export function registerBuildIndexCommand(
       await commandHost.executeCommand(matchedCommand);
 
       logger.info("底层代码库索引构建任务已完成。");
-      statusBar?.updateState("idle");
     } catch (error) {
-      statusBar?.updateState("idle");
       const errStr = error instanceof Error ? error.message : String(error);
       const msg = vscode.l10n.t(
         "Error while triggering index build: {0}",
@@ -74,7 +71,9 @@ export function registerBuildIndexCommand(
       logger.error(msg, error);
       void vscode.window.showErrorMessage(msg);
     } finally {
+      // 无论构建成功、底层命令缺失还是发生异常，均在单一出口保证复位
       isBuilding = false;
+      statusBar?.updateState("idle");
     }
   });
 }

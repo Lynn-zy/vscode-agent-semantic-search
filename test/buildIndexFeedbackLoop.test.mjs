@@ -40,6 +40,13 @@ test("Bug Regression 1: 当触发构建代码库索引且底层构建未完成�
 
     const item = statusBar.statusBarItem;
 
+    // 0. 验证通过领域状态属性获取的状态准确
+    assert.equal(
+      statusBar.state,
+      "indexing",
+      "构建中途 statusBar.state 必须为 indexing",
+    );
+
     // 1. 在构建未完成时，绝不能是就绪文案
     assert.equal(
       item.tooltip.includes("ready") || item.tooltip.includes("已就绪"),
@@ -64,7 +71,12 @@ test("Bug Regression 1: 当触发构建代码库索引且底层构建未完成�
     resolveBuild();
     await executePromise;
 
-    // 3. 构建完成后，离开 indexing 状态
+    // 3. 构建完成后，离开 indexing 状态并复位为 idle
+    assert.equal(
+      statusBar.state,
+      "idle",
+      "构建完成后 statusBar.state 必须复位为 idle",
+    );
     assert.equal(
       item.text.includes("$(sync~spin)"),
       false,
@@ -104,6 +116,11 @@ test("Bug Regression 2: 当底层构建索引发生异常时，状态栏应安�
     await vscode.commands.executeCommand(COMMAND_BUILD_INDEX);
 
     const item = statusBar.statusBarItem;
+    assert.equal(
+      statusBar.state,
+      "idle",
+      "构建发生异常后 statusBar.state 必须安全复位为 idle",
+    );
     assert.equal(
       item.text.includes("$(sync~spin)"),
       false,

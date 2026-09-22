@@ -16,8 +16,14 @@
   - 消除跨目录分散的降级提示与中英文混杂，规范化面向 Agent 模型的英文排查与命令引导文本；
   - 移除纯做字段浅透传的浅模块 `src/relay/relayFailure.ts` 与 `createRelayFailure` 函数；
   - 将 `SemanticSearchTool` 精简退化为极薄的 VS Code 宿主接口适配器。
+- **收敛索引构建状态源与单点复位保护**：
+  - 在 `buildIndexCommand` 中通过 `finally` 块实现单一出口状态复位，确保无论执行成功、底层命令缺失还是发生异常，均原子保证 `isBuilding` 释放与状态栏复位为 `idle`；
+  - 为 `IndexStatusBar` 增加只读 `state` 属性，测试可直接断言状态栏领域状态，消除对私有属性的穿透。
+- **补全工具别名契约映射与测试**：
+  - 在 `ToolDescriptor` 接口中显式声明 `toolReferenceName` 属性并在 `VsCodeToolHost` 中如实映射，消除类型欺骗与潜在死代码；
+  - 新增 `test/toolResolver.test.mjs` 测试套件，验证别名匹配与自引用排除逻辑。
 - **自动化测试增强**：
-  - 新增 `test/outcomePresenter.test.mjs`，包含 9 个脱离 VS Code Mock 依赖的纯逻辑单元测试，全量测试用例扩充至 17 项并全数通过。
+  - 新增 `test/outcomePresenter.test.mjs` 与 `test/toolResolver.test.mjs`，包含脱离 VS Code Mock 依赖的纯逻辑单元测试，全量测试用例扩充至 19 项并全数通过。
 
 ---
 
