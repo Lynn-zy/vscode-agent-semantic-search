@@ -26,13 +26,12 @@ export class ToolResolver {
     const registeredTools = this.toolHost.listTools();
     for (const candidate of candidates) {
       const match = registeredTools.find((tool) => {
-        // 自引用防护：严禁解析为当前扩展自身注册的工具
-        if (tool.name === TOOL_NAME) {
-          return false;
-        }
-        // 允许通过注册名或引用别名匹配
         const refName = (tool as { toolReferenceName?: string })
           .toolReferenceName;
+        // 自引用防护：严禁解析为当前扩展自身注册的工具（无论是按注册名还是按引用别名）
+        if (tool.name === TOOL_NAME || refName === TOOL_NAME) {
+          return false;
+        }
         return tool.name === candidate || refName === candidate;
       });
       if (match) {

@@ -4,10 +4,10 @@
  */
 
 /**
- * 暴露给 VS Code Agent 的语言模型工具注册名称
- * 注：避免直接使用 "semantic_search"，以防命中 Copilot 对其内置工具的黑名单过滤
+ * 暴露给 VS Code Agent 的语言模型工具注册名称与提示词引用名（保持完全一致）
+ * 注：使用 "semanticSearch"，避开 Copilot 对下划线 "semantic_search" 的内置黑名单过滤，同时统一注册名与别名
  */
-export const TOOL_NAME = "workspace_semantic_search";
+export const TOOL_NAME = "semanticSearch";
 
 /**
  * 默认底层 Copilot 语义检索工具注册 ID

@@ -15,7 +15,7 @@
 
 ### 1.3 解决方案
 
-开发 VS Code 语言模型工具扩展 `vscode-agent-semantic-search`，注册工具 `workspace_semantic_search`（别名 `semanticSearch`），避开黑名单，在 Agent 自主调用时通过 `vscode.lm.invokeTool("copilot_searchCodebase", ...)` 间接转发给 Copilot 底层语义检索服务。
+开发 VS Code 语言模型工具扩展 `vscode-agent-semantic-search`，注册工具 `semanticSearch`（工具注册名与别名完全一致），避开黑名单，在 Agent 自主调用时通过 `vscode.lm.invokeTool("copilot_searchCodebase", ...)` 间接转发给 Copilot 底层语义检索服务。
 
 ---
 
@@ -30,7 +30,7 @@
 
 ### 3.1 模块结构（`src/`）
 
-- `constants.ts`：单一事实源。定义工具名 `TOOL_NAME = "workspace_semantic_search"`、默认底层中继 ID `DEFAULT_RELAY_TOOL_ID = "copilot_searchCodebase"`、超时上下限（5s~180s）与命令 ID 常量。
+- `constants.ts`：单一事实源。定义工具名 `TOOL_NAME = "semanticSearch"`、默认底层中继 ID `DEFAULT_RELAY_TOOL_ID = "copilot_searchCodebase"`、超时上下限（5s~180s）与命令 ID 常量。
 - `types.ts`：定义入参结构 `SemanticSearchInput`、结果联合 `SearchOutcome`（`ok` / `empty` / `failed`）以及结构化失败类型 `RelayFailureKind`（`tool-missing` / `not-ready` / `timeout` / `invalid-input` / `relay-error`）。
 - `relay/`：
   - `ports.ts`：定义 `ToolHost` 与 `CommandHost` 接口，隔离直接对 `vscode.lm` 与 `vscode.commands` 的硬依赖；
@@ -52,12 +52,12 @@
   "name": "vscode-agent-semantic-search",
   "activationEvents": [
     "onStartupFinished",
-    "onLanguageModelTool:workspace_semantic_search"
+    "onLanguageModelTool:semanticSearch"
   ],
   "contributes": {
     "languageModelTools": [
       {
-        "name": "workspace_semantic_search",
+        "name": "semanticSearch",
         "toolReferenceName": "semanticSearch",
         "displayName": "工作区代码语义检索",
         "canBeReferencedInPrompt": true,
@@ -85,7 +85,7 @@
    ```
 3. 在 VS Code 中执行 `Developer: Reload Window`；
 4. 检查 Chat 输入框左侧的“配置工具”面板（Manage Tools），确认列表中出现 **工作区代码语义检索 (`semanticSearch`)** 并处于勾选状态；
-5. 新建 Chat 会话（`+`），向 Agent 提问概念性代码检索问题，验证 Agent 是否自主调用 `workspace_semantic_search`。
+5. 新建 Chat 会话（`+`），向 Agent 提问概念性代码检索问题，验证 Agent 是否自主调用 `semanticSearch`。
 
 ### 4.2 潜在优化与待完善项
 

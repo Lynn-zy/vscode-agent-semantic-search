@@ -1,7 +1,7 @@
 {
   "name": "vscode-agent-semantic-search",
   "displayName": "Agent Semantic Search Bridge",
-  "description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（workspace_semantic_search）",
+  "description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（semanticSearch）",
   "version": "0.1.0",
   "publisher": "local",
   "engines": {
@@ -14,13 +14,13 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onLanguageModelTool:workspace_semantic_search"
+    "onLanguageModelTool:semanticSearch"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "languageModelTools": [
       {
-        "name": "workspace_semantic_search",
+        "name": "semanticSearch",
         "toolReferenceName": "semanticSearch",
         "displayName": "工作区代码语义检索",
         "icon": "$(search)",

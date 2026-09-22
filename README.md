@@ -1,13 +1,13 @@
 # Agent Semantic Search Bridge (`vscode-agent-semantic-search`)
 
-这是一个为 VS Code 设计的中继扩展插件，旨在将工作区代码语义检索工具（`workspace_semantic_search`，引用别名 `semanticSearch`）开放给所有智能体（Agent），让使用第三方或兼容模型（如 DeepSeek、Gemini、Claude 等）的 Agent 能够自主调用工作区语义代码搜索能力。
+这是一个为 VS Code 设计的中继扩展插件，旨在将工作区代码语义检索工具（`semanticSearch`）开放给所有智能体（Agent），让使用第三方或兼容模型（如 DeepSeek、Gemini、Claude 等）的 Agent 能够自主调用工作区语义代码搜索能力。
 
 ---
 
 ## 🌟 核心特性
 
 1. **自主语义检索工具（Language Model Tool）**：
-   - 工具名：`workspace_semantic_search`（引用别名 `semanticSearch`）
+   - 工具注册名与引用别名：`semanticSearch`
    - 入参：
      - `query` (string, 必填)：自然语言语义描述或功能意图（例如：“用户权限拦截器”、“WebSocket 心跳保活”）。
      - `scopedDirectories` (string[], 可选)：限定搜索的子目录路径列表。
