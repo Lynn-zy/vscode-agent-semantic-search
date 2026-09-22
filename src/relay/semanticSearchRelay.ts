@@ -282,6 +282,9 @@ export class SemanticSearchRelay {
 
     // 步骤五：多态结果规整抽取为 Markdown
     const markdownContent = adaptContentToMarkdown(rawResult.content);
+    this.logger?.info(
+      `多态结果抽取完成: 收到原始部件数=${rawResult.content?.length ?? 0}, 抽取 Markdown 长度=${markdownContent.length}`,
+    );
 
     // 步骤六：空结果或未就绪判定
     if (isNotReadyNotice(markdownContent)) {

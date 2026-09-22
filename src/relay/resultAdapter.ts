@@ -8,11 +8,11 @@ import { MAX_RESULT_CHARACTERS_LIMIT } from "../constants";
 /**
  * 递归展平 PromptTsx 树状节点为纯文本/Markdown
  * @param node 当前节点
- * @param depth 递归保护深度，避免潜在循环引用
+ * @param depth 递归保护深度，避免潜在循环引用（PromptTsx 嵌套组件树深度通常达 12~20 层）
  * @returns 抽取得到的文本
  */
 function flattenPromptTsxNode(node: unknown, depth: number = 0): string {
-  if (depth > 12 || node == null) {
+  if (depth > 48 || node == null) {
     return "";
   }
 
@@ -33,11 +33,18 @@ function flattenPromptTsxNode(node: unknown, depth: number = 0): string {
   if (typeof node === "object") {
     const obj = node as Record<string, unknown>;
 
-    // 检查自身携带的文本属性
-    const ownValue = typeof obj.value === "string" ? obj.value : "";
+    // 检查自身携带的直接文本属性（text 或 value）
+    const directTexts: string[] = [];
+    if (typeof obj.text === "string" && obj.text.trim()) {
+      directTexts.push(obj.text.trim());
+    }
+    if (typeof obj.value === "string" && obj.value.trim()) {
+      directTexts.push(obj.value.trim());
+    }
+    const ownText = directTexts.join("\n");
 
-    // 检查常见子节点容器（children, content, parts）
-    const childKeys = ["children", "content", "parts"];
+    // 检查常见子节点容器（node, children, content, parts）
+    const childKeys = ["node", "children", "content", "parts"];
     const childrenParts: string[] = [];
 
     for (const key of childKeys) {
@@ -49,11 +56,19 @@ function flattenPromptTsxNode(node: unknown, depth: number = 0): string {
       }
     }
 
-    const combinedChildren = childrenParts.join("\n");
-    if (ownValue && combinedChildren) {
-      return `${ownValue}\n${combinedChildren}`;
+    // 若 value 自身是嵌套对象或数组，递归向下展开
+    if (obj.value != null && typeof obj.value === "object") {
+      const valueText = flattenPromptTsxNode(obj.value, depth + 1);
+      if (valueText) {
+        childrenParts.push(valueText);
+      }
     }
-    return ownValue || combinedChildren;
+
+    const combinedChildren = childrenParts.join("\n\n");
+    if (ownText && combinedChildren) {
+      return `${ownText}\n\n${combinedChildren}`;
+    }
+    return ownText || combinedChildren;
   }
 
   return "";

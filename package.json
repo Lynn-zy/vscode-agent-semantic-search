@@ -100,7 +100,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "npm run compile && node --test test/buildIndexFeedbackLoop.test.mjs"
+    "test": "npm run compile && node --test test/*.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
