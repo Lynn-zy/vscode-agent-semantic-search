@@ -65,7 +65,12 @@ export function registerDiagnosticsCommand(
           ),
         );
       } catch (error) {
-        const msg = `收集诊断信息失败: ${error instanceof Error ? error.message : String(error)}`;
+        // 捕获异常并调用 l10n 国际化接口生成弹窗错误提示
+        const errStr = error instanceof Error ? error.message : String(error);
+        const msg = vscode.l10n.t(
+          "Error while collecting diagnostics: {0}",
+          errStr,
+        );
         logger.error(msg, error);
         void vscode.window.showErrorMessage(msg);
       }

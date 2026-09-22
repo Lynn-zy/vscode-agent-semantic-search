@@ -14,6 +14,7 @@
   "Codebase index is currently building, please wait...": "工作区代码库索引正在构建中，请稍候...",
   "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.": "未在当前环境中找到 Copilot 的索引构建命令（{0}）。请确认 GitHub Copilot 扩展已安装并处于启用状态。",
   "Error while triggering index build: {0}": "触发构建索引时发生异常: {0}",
+  "Error while collecting diagnostics: {0}": "收集诊断信息失败: {0}",
   "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.": "已在输出面板「Agent Semantic Search」生成本地环境诊断报告。",
   "Searching workspace: `{0}`": "正在语义检索工作区：`{0}`"
 }

@@ -8,6 +8,16 @@
 
 ## [0.1.1] - 2026-09-22
 
+### 修复与规范 (Fixed)
+
+- **命令标题与分类规范化 (`vscode-ext-commands`)**：
+  - 移除 `package.nls.*.json` 中各命令标题包含的 `Semantic Search: ` 与 `语义搜索：` 前缀，解决 VS Code 命令面板中自动追加分类前缀导致的冗余重复展示问题；
+  - 规范声明 `contributes.commands` 中各命令的 `category` 为 `%commands.category%` 占位符，在多语言配置中统一维护分类名称。
+- **扩展配置与错误提示多语言国际化 (`vscode-ext-localization`)**：
+  - 将 `package.json` 中的 `configuration.title` 接入 `%config.title%` 国际化占位符；
+  - 修复 `src/commands/diagnosticsCommand.ts` 捕获异常时错误弹窗使用硬编码中文的问题，改为使用 `vscode.l10n.t` 封装；
+  - 在 `bundle.l10n.json`、`bundle.l10n.zh-cn.json` 和 `bundle.l10n.zh-hans.json` 中补齐 `Error while collecting diagnostics: {0}` 翻译词条。
+
 ### 重构与优化 (Refactored)
 
 - **收敛终态呈现为单一深模块 (`outcomePresenter`)**：

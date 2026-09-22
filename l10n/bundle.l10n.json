@@ -14,6 +14,7 @@
   "Codebase index is currently building, please wait...": "Codebase index is currently building, please wait...",
   "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.": "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.",
   "Error while triggering index build: {0}": "Error while triggering index build: {0}",
+  "Error while collecting diagnostics: {0}": "Error while collecting diagnostics: {0}",
   "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.": "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.",
   "Searching workspace: `{0}`": "Searching workspace: `{0}`"
 }

@@ -79,21 +79,21 @@
       {
         "command": "semanticSearch.buildIndex",
         "title": "%commands.buildIndex.title%",
-        "category": "Semantic Search"
+        "category": "%commands.category%"
       },
       {
         "command": "semanticSearch.collectIndexDiagnostics",
         "title": "%commands.collectDiagnostics.title%",
-        "category": "Semantic Search"
+        "category": "%commands.category%"
       },
       {
         "command": "semanticSearch.showMenu",
         "title": "%commands.showMenu.title%",
-        "category": "Semantic Search"
+        "category": "%commands.category%"
       }
     ],
     "configuration": {
-      "title": "Semantic Search",
+      "title": "%config.title%",
       "properties": {
         "semanticSearch.statusBar.enabled": {
           "type": "boolean",
