@@ -45,6 +45,79 @@ function isNotReadyNotice(content: string): boolean {
 }
 
 /**
+ * 规整检索文本：剥离可能混入的 #codebase 前缀和两端多余空白
+ * 纯函数无外部依赖，便于直接单元测试
+ * @param rawQuery 原始查询字串
+ * @returns 规整后的纯净查询语句
+ */
+export function normalizeQuery(rawQuery: string): string {
+  return (rawQuery ?? "").replace(/^\s*#codebase\s+/, "").trim();
+}
+
+/**
+ * 规整限定目录列表：相对工作区根路径转换为绝对路径，剔除重复并截断上限
+ * 纯函数支持显式传入工作区根路径列表，解除全局 VS Code 依赖
+ * @param rawDirs 原始目录参数数组
+ * @param workspaceRoots 当前生效的工作区根路径列表
+ * @returns 规整后的目录数组及可能存在的备注说明
+ */
+export function normalizeScopedDirectories(
+  rawDirs?: readonly string[],
+  workspaceRoots: readonly string[] = [],
+): {
+  directories?: string[];
+  note?: string;
+} {
+  if (!rawDirs || !rawDirs.length) {
+    return {};
+  }
+
+  const resolvedSet = new Set<string>();
+  let hasGlobPattern = false;
+
+  for (const dir of rawDirs) {
+    if (!dir || typeof dir !== "string") {
+      continue;
+    }
+    const trimmed = dir.trim();
+    if (!trimmed) {
+      continue;
+    }
+
+    // 如果包含通配符，保留原样透传
+    if (/[*?{}[\]]/.test(trimmed)) {
+      hasGlobPattern = true;
+      resolvedSet.add(trimmed);
+      continue;
+    }
+
+    // 绝对路径保留，相对路径按首个工作区根目录解析
+    const absolutePath = path.isAbsolute(trimmed)
+      ? path.normalize(trimmed)
+      : path.resolve(workspaceRoots[0] ?? "", trimmed);
+
+    resolvedSet.add(absolutePath);
+  }
+
+  const directories = Array.from(resolvedSet).slice(
+    0,
+    MAX_SCOPED_DIRECTORIES_LIMIT,
+  );
+  const noteParts: string[] = [];
+  if (hasGlobPattern) {
+    noteParts.push("（部分目录包含通配符模式，已原样透传底层）");
+  }
+  if (resolvedSet.size > MAX_SCOPED_DIRECTORIES_LIMIT) {
+    noteParts.push(
+      `（限定目录数超出上限，已自动截取前 ${MAX_SCOPED_DIRECTORIES_LIMIT} 个）`,
+    );
+  }
+  const note = noteParts.length > 0 ? noteParts.join(" ") : undefined;
+
+  return { directories, note };
+}
+
+/**
  * 语义检索中继编排服务
  */
 export class SemanticSearchRelay {
@@ -63,81 +136,12 @@ export class SemanticSearchRelay {
   }
 
   /**
-   * 规整检索文本：剥离可能混入的 #codebase 前缀和两端多余空白
-   * @param rawQuery 原始查询字串
-   * @returns 规整后的纯净查询语句
-   */
-  private normalizeQuery(rawQuery: string): string {
-    return (rawQuery ?? "").replace(/^\s*#codebase\s+/, "").trim();
-  }
-
-  /**
-   * 规整限定目录列表：相对工作区根路径转换为绝对路径，剔除重复并截断上限
-   * @param rawDirs 原始目录参数数组
-   * @returns 规整后的目录数组及可能存在的备注说明
-   */
-  private normalizeScopedDirectories(rawDirs?: readonly string[]): {
-    directories?: string[];
-    note?: string;
-  } {
-    if (!rawDirs || !rawDirs.length) {
-      return {};
-    }
-
-    const workspaceRoots = (vscode.workspace.workspaceFolders ?? []).map(
-      (folder) => folder.uri.fsPath,
-    );
-    const resolvedSet = new Set<string>();
-    let hasGlobPattern = false;
-
-    for (const dir of rawDirs) {
-      if (!dir || typeof dir !== "string") {
-        continue;
-      }
-      const trimmed = dir.trim();
-      if (!trimmed) {
-        continue;
-      }
-
-      // 如果包含通配符，保留原样透传
-      if (/[*?{}[\]]/.test(trimmed)) {
-        hasGlobPattern = true;
-        resolvedSet.add(trimmed);
-        continue;
-      }
-
-      // 绝对路径保留，相对路径按首个工作区根目录解析
-      const absolutePath = path.isAbsolute(trimmed)
-        ? path.normalize(trimmed)
-        : path.resolve(workspaceRoots[0] ?? "", trimmed);
-
-      resolvedSet.add(absolutePath);
-    }
-
-    const directories = Array.from(resolvedSet).slice(
-      0,
-      MAX_SCOPED_DIRECTORIES_LIMIT,
-    );
-    const noteParts: string[] = [];
-    if (hasGlobPattern) {
-      noteParts.push("（部分目录包含通配符模式，已原样透传底层）");
-    }
-    if (resolvedSet.size > MAX_SCOPED_DIRECTORIES_LIMIT) {
-      noteParts.push(
-        `（限定目录数超出上限，已自动截取前 ${MAX_SCOPED_DIRECTORIES_LIMIT} 个）`,
-      );
-    }
-    const note = noteParts.length > 0 ? noteParts.join(" ") : undefined;
-
-    return { directories, note };
-  }
-
-  /**
    * 执行完整的语义检索中继流水线
    * @param input Agent 传入的参数
    * @param config 插件当前配置快照
    * @param token 外层取消 Token
    * @param toolInvocationToken 会话级上下文关联 Token
+   * @param customWorkspaceRoots 可选的自定义工作区根路径（若缺省则自动读取 VS Code 工作区）
    * @returns 结构化输出结果
    */
   public async execute(
@@ -145,11 +149,12 @@ export class SemanticSearchRelay {
     config: ExtensionConfig,
     token: vscode.CancellationToken,
     toolInvocationToken?: vscode.ChatParticipantToolToken,
+    customWorkspaceRoots?: readonly string[],
   ): Promise<SearchOutcome> {
     const startTime = Date.now();
 
     // 步骤一：输入校验与规整
-    const query = this.normalizeQuery(input.query);
+    const query = normalizeQuery(input.query);
     if (!query) {
       return {
         status: "failed",
@@ -185,8 +190,14 @@ export class SemanticSearchRelay {
 
     // 步骤三：入参能力适配（目录范围探测）
     const relayPayload: Record<string, unknown> = { query };
-    const { directories, note: dirNote } = this.normalizeScopedDirectories(
+    const workspaceRoots =
+      customWorkspaceRoots ??
+      (vscode.workspace.workspaceFolders ?? []).map(
+        (folder) => folder.uri.fsPath,
+      );
+    const { directories, note: dirNote } = normalizeScopedDirectories(
       input.scopedDirectories,
+      workspaceRoots,
     );
 
     let unsupportedDirNote: string | undefined;

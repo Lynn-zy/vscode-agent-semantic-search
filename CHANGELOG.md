@@ -22,8 +22,12 @@
 - **补全工具别名契约映射与测试**：
   - 在 `ToolDescriptor` 接口中显式声明 `toolReferenceName` 属性并在 `VsCodeToolHost` 中如实映射，消除类型欺骗与潜在死代码；
   - 新增 `test/toolResolver.test.mjs` 测试套件，验证别名匹配与自引用排除逻辑。
+- **中继核心规整解耦与全链路自动化测试**：
+  - 将 `normalizeQuery` 与 `normalizeScopedDirectories` 纯化为独立纯函数并支持自定义 `workspaceRoots` 参数，彻底解耦全局 VS Code 工作区状态；
+  - 完善测试运行时 Mock，轻量实现 `CancellationTokenSource` 与 `CancellationError`；
+  - 新增 `test/semanticSearchRelay.test.mjs` 测试套件（包含 12 项细粒度用例），完整覆盖超时竞态、外层取消抛错、未就绪判定（符合 ADR-0002）、目录 Schema 自适应以及各种失败分类分支。
 - **自动化测试增强**：
-  - 新增 `test/outcomePresenter.test.mjs` 与 `test/toolResolver.test.mjs`，包含脱离 VS Code Mock 依赖的纯逻辑单元测试，全量测试用例扩充至 19 项并全数通过。
+  - 新增 `test/outcomePresenter.test.mjs`、`test/toolResolver.test.mjs` 与 `test/semanticSearchRelay.test.mjs`，全量测试用例扩充至 31 项并全数通过。
 
 ---
 

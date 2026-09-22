@@ -42,6 +42,57 @@ class MockMarkdownString {
   }
 }
 
+class MockCancellationToken {
+  constructor() {
+    this.isCancellationRequested = false;
+    this._listeners = [];
+  }
+
+  onCancellationRequested(listener) {
+    if (this.isCancellationRequested) {
+      listener();
+      return new MockDisposable(() => {});
+    }
+    this._listeners.push(listener);
+    return new MockDisposable(() => {
+      const idx = this._listeners.indexOf(listener);
+      if (idx !== -1) {
+        this._listeners.splice(idx, 1);
+      }
+    });
+  }
+
+  _cancel() {
+    if (!this.isCancellationRequested) {
+      this.isCancellationRequested = true;
+      for (const listener of [...this._listeners]) {
+        listener();
+      }
+    }
+  }
+}
+
+class MockCancellationTokenSource {
+  constructor() {
+    this.token = new MockCancellationToken();
+  }
+
+  cancel() {
+    this.token._cancel();
+  }
+
+  dispose() {
+    this.token._listeners = [];
+  }
+}
+
+class MockCancellationError extends Error {
+  constructor(message = "Canceled") {
+    super(message);
+    this.name = "CancellationError";
+  }
+}
+
 const registeredCommands = new Map();
 
 const commands = {
@@ -109,4 +160,6 @@ module.exports = {
   StatusBarAlignment,
   Disposable: MockDisposable,
   MarkdownString: MockMarkdownString,
+  CancellationTokenSource: MockCancellationTokenSource,
+  CancellationError: MockCancellationError,
 };
