@@ -1,0 +1,19 @@
+{
+  "Semantic Search": "Semantic Search",
+  "Semantic Search: Indexing...": "Semantic Search: Indexing...",
+  "Agent semantic search is ready. Click to open management menu.": "Agent semantic search is ready. Click to open management menu.",
+  "Building codebase index, please wait...": "Building codebase index, please wait...",
+  "Semantic Search Management": "Semantic Search Management",
+  "Select an action to perform": "Select an action to perform",
+  "Build Codebase Index": "Build Codebase Index",
+  "Trigger Copilot to build codebase semantic index": "Trigger Copilot to build codebase semantic index",
+  "Collect Index Diagnostics": "Collect Index Diagnostics",
+  "View language model tools status and diagnostic report": "View language model tools status and diagnostic report",
+  "Open Semantic Search Settings": "Open Semantic Search Settings",
+  "Configure timeout, degradation hints and relay target": "Configure timeout, degradation hints and relay target",
+  "Codebase index is currently building, please wait...": "Codebase index is currently building, please wait...",
+  "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.": "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.",
+  "Error while triggering index build: {0}": "Error while triggering index build: {0}",
+  "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.": "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.",
+  "Searching workspace: `{0}`": "Searching workspace: `{0}`"
+}

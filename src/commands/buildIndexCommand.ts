@@ -32,7 +32,7 @@ export function registerBuildIndexCommand(
     if (isBuilding) {
       logger.warn("已有执行中的代码库索引构建任务，已忽略本次重复触发。");
       void vscode.window.showInformationMessage(
-        "工作区代码库索引正在构建中，请稍候...",
+        vscode.l10n.t("Codebase index is currently building, please wait..."),
       );
       return;
     }
@@ -48,8 +48,11 @@ export function registerBuildIndexCommand(
 
       if (!matchedCommand) {
         statusBar?.updateState("idle");
-        const candidatesStr = BUILD_INDEX_COMMAND_CANDIDATES.join(" 或 ");
-        const warning = `未在当前环境中找到 Copilot 的索引构建命令（${candidatesStr}）。请确认 GitHub Copilot 扩展已安装并处于启用状态。`;
+        const candidatesStr = BUILD_INDEX_COMMAND_CANDIDATES.join(" | ");
+        const warning = vscode.l10n.t(
+          "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.",
+          candidatesStr,
+        );
         logger.warn(warning);
         void vscode.window.showWarningMessage(warning);
         return;
@@ -63,7 +66,11 @@ export function registerBuildIndexCommand(
       statusBar?.updateState("idle");
     } catch (error) {
       statusBar?.updateState("idle");
-      const msg = `触发构建索引时发生异常: ${error instanceof Error ? error.message : String(error)}`;
+      const errStr = error instanceof Error ? error.message : String(error);
+      const msg = vscode.l10n.t(
+        "Error while triggering index build: {0}",
+        errStr,
+      );
       logger.error(msg, error);
       void vscode.window.showErrorMessage(msg);
     } finally {

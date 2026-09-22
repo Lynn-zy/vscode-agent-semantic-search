@@ -1,0 +1,16 @@
+{
+  "extension.displayName": "Agent Semantic Search Bridge",
+  "extension.description": "Enables VS Code Agents to autonomously perform codebase semantic searches via the semanticSearch tool.",
+  "tools.semanticSearch.displayName": "Workspace Code Semantic Search",
+  "tools.semanticSearch.userDescription": "Allow Agent to search codebase snippets using semantic search.",
+  "tools.semanticSearch.modelDescription": "Run a semantic search for relevant code snippets and architecture concepts across the current workspace. Use this when you know functional intents or business logic but not exact symbol names. Do not use when exact paths or keywords are already known.",
+  "tools.semanticSearch.query.description": "Natural language query or concept description (e.g. 'user permission verification logic', 'websocket reconnection').",
+  "tools.semanticSearch.scopedDirectories.description": "Optional list of directories to limit the search scope (relative or absolute paths). Defaults to whole workspace.",
+  "commands.buildIndex.title": "Semantic Search: Build Codebase Index",
+  "commands.collectDiagnostics.title": "Semantic Search: Collect Index Diagnostics",
+  "commands.showMenu.title": "Semantic Search: Open Management Menu",
+  "config.statusBar.enabled.description": "Whether to display the semantic search status and quick actions entry in the status bar.",
+  "config.timeoutMs.description": "Timeout limit for a single relay search in milliseconds (recommend 30000~60000ms).",
+  "config.showDegradationHints.description": "Whether to append actionable diagnostic and fallback suggestions to the Agent when results are empty or search fails.",
+  "config.relayToolId.description": "Registered tool ID of the underlying relay target tool."
+}

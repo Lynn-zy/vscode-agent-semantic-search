@@ -60,13 +60,17 @@ export class IndexStatusBar implements vscode.Disposable {
 
     switch (this.currentState) {
       case "indexing":
-        this.statusBarItem.text = "$(sync~spin) 语义搜索: 构建索引中";
-        this.statusBarItem.tooltip = "正在构建工作区代码库索引，请稍候...";
+        this.statusBarItem.text = `$(sync~spin) ${vscode.l10n.t("Semantic Search: Indexing...")}`;
+        this.statusBarItem.tooltip = vscode.l10n.t(
+          "Building codebase index, please wait...",
+        );
         break;
       case "idle":
       default:
-        this.statusBarItem.text = "$(search) 语义搜索";
-        this.statusBarItem.tooltip = "Agent 语义检索就绪。点击打开管理菜单。";
+        this.statusBarItem.text = `$(search) ${vscode.l10n.t("Semantic Search")}`;
+        this.statusBarItem.tooltip = vscode.l10n.t(
+          "Agent semantic search is ready. Click to open management menu.",
+        );
         break;
     }
 
@@ -82,24 +86,30 @@ export class IndexStatusBar implements vscode.Disposable {
       const items: ManagementMenuItem[] = [
         {
           id: "buildIndex",
-          label: "$(database) 构建工作区代码库索引",
-          description: "触发 Copilot 构建当前工作区的代码库索引",
+          label: `$(database) ${vscode.l10n.t("Build Codebase Index")}`,
+          description: vscode.l10n.t(
+            "Trigger Copilot to build codebase semantic index",
+          ),
         },
         {
           id: "diagnostics",
-          label: "$(output) 收集索引诊断信息",
-          description: "查看当前环境中的 LM 工具状态与诊断报告",
+          label: `$(output) ${vscode.l10n.t("Collect Index Diagnostics")}`,
+          description: vscode.l10n.t(
+            "View language model tools status and diagnostic report",
+          ),
         },
         {
           id: "settings",
-          label: "$(gear) 打开语义搜索设置",
-          description: "调整超时时限、降级提示与中继工具目标",
+          label: `$(gear) ${vscode.l10n.t("Open Semantic Search Settings")}`,
+          description: vscode.l10n.t(
+            "Configure timeout, degradation hints and relay target",
+          ),
         },
       ];
 
       const selected = await vscode.window.showQuickPick(items, {
-        title: "语义搜索管理菜单",
-        placeHolder: "选择要执行的操作",
+        title: vscode.l10n.t("Semantic Search Management"),
+        placeHolder: vscode.l10n.t("Select an action to perform"),
       });
 
       if (!selected) {

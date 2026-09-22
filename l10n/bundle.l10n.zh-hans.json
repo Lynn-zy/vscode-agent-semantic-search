@@ -1,0 +1,19 @@
+{
+  "Semantic Search": "语义搜索",
+  "Semantic Search: Indexing...": "语义搜索: 构建索引中",
+  "Agent semantic search is ready. Click to open management menu.": "Agent 语义检索就绪。点击打开管理菜单。",
+  "Building codebase index, please wait...": "正在构建工作区代码库索引，请稍候...",
+  "Semantic Search Management": "语义搜索管理菜单",
+  "Select an action to perform": "选择要执行的操作",
+  "Build Codebase Index": "构建工作区代码库索引",
+  "Trigger Copilot to build codebase semantic index": "触发 Copilot 构建当前工作区的代码库索引",
+  "Collect Index Diagnostics": "收集索引诊断信息",
+  "View language model tools status and diagnostic report": "查看当前环境中的 LM 工具状态与诊断报告",
+  "Open Semantic Search Settings": "打开语义搜索设置",
+  "Configure timeout, degradation hints and relay target": "调整超时时限、降级提示与中继工具目标",
+  "Codebase index is currently building, please wait...": "工作区代码库索引正在构建中，请稍候...",
+  "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.": "未在当前环境中找到 Copilot 的索引构建命令（{0}）。请确认 GitHub Copilot 扩展已安装并处于启用状态。",
+  "Error while triggering index build: {0}": "触发构建索引时发生异常: {0}",
+  "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.": "已在输出面板「Agent Semantic Search」生成本地环境诊断报告。",
+  "Searching workspace: `{0}`": "正在语义检索工作区：`{0}`"
+}

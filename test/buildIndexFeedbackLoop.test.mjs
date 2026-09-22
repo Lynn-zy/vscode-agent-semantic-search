@@ -42,19 +42,20 @@ test("Bug Regression 1: 当触发构建代码库索引且底层构建未完成�
 
     // 1. 在构建未完成时，绝不能是就绪文案
     assert.equal(
-      item.tooltip.includes("已就绪"),
+      item.tooltip.includes("ready") || item.tooltip.includes("已就绪"),
       false,
       `构建中途状态栏不得提示已就绪，当前 tooltip: ${item.tooltip}`,
     );
 
     // 2. 状态栏必须呈现构建中状态（包含转圈图标与构建字样）
     assert.equal(
-      item.text.includes("构建索引中") || item.text.includes("$(sync~spin)"),
+      item.text.includes("$(sync~spin)"),
       true,
       `构建中途状态栏 text 必须包含构建中标识，当前 text: ${item.text}`,
     );
     assert.equal(
-      item.tooltip.includes("正在构建工作区代码库索引"),
+      item.tooltip.includes("Building codebase index") ||
+        item.tooltip.includes("正在构建工作区代码库索引"),
       true,
       `构建中途 tooltip 必须明确指示正在构建，当前 tooltip: ${item.tooltip}`,
     );
@@ -109,7 +110,7 @@ test("Bug Regression 2: 当底层构建索引发生异常时，状态栏应安�
       `构建抛出异常后状态栏应退出转圈构建中状态，当前 text: ${item.text}`,
     );
     assert.equal(
-      item.text.includes("$(search) 语义搜索"),
+      item.text.includes("Semantic Search") || item.text.includes("语义搜索"),
       true,
       `构建抛出异常后状态栏应复位为 idle 就绪态，当前 text: ${item.text}`,
     );

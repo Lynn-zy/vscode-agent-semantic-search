@@ -88,10 +88,24 @@ const StatusBarAlignment = {
   Right: 2,
 };
 
+const l10n = {
+  t(message, ...args) {
+    if (typeof message === "string") {
+      let res = message;
+      args.forEach((arg, idx) => {
+        res = res.replace(`{${idx}}`, String(arg));
+      });
+      return res;
+    }
+    return message?.message || "";
+  },
+};
+
 module.exports = {
   commands,
   window,
   workspace,
+  l10n,
   StatusBarAlignment,
   Disposable: MockDisposable,
   MarkdownString: MockMarkdownString,

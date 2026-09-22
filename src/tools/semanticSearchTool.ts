@@ -48,11 +48,11 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
 
     if (outcome.status === "empty") {
       const emptyNote = [
-        "【语义检索未返回匹配代码】",
+        "[Semantic Search: No matching code found]",
         ...outcome.notes,
         "",
         config.showDegradationHints
-          ? `${DEGRADATION_SUGGESTION_TITLE}\n1. 如果需要精确搜索，请立即改用 \`grep_search\` 或 \`file_search\`。\n2. 如需构建代码库索引，用户可通过命令面板执行「语义搜索：构建工作区代码库索引」。`
+          ? `${DEGRADATION_SUGGESTION_TITLE}\n1. If exact matches are needed, immediately switch to \`grep_search\` or \`file_search\`.\n2. To build the codebase index, run 'Semantic Search: Build Codebase Index' via the command palette.`
           : "",
       ]
         .filter(Boolean)
@@ -85,7 +85,7 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
     const query = (options.input?.query ?? "").trim();
     return {
       invocationMessage: new vscode.MarkdownString(
-        `正在语义检索工作区：\`${query || "..."}\``,
+        vscode.l10n.t("Searching workspace: `{0}`", query || "..."),
       ),
     };
   }

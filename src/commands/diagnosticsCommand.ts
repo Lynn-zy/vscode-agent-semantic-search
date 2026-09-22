@@ -60,7 +60,9 @@ export function registerDiagnosticsCommand(
         logger.show();
 
         void vscode.window.showInformationMessage(
-          "已在输出面板「Agent Semantic Search」生成本地环境诊断报告。",
+          vscode.l10n.t(
+            "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.",
+          ),
         );
       } catch (error) {
         const msg = `收集诊断信息失败: ${error instanceof Error ? error.message : String(error)}`;
