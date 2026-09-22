@@ -30,16 +30,16 @@
 
 ### 3.1 模块结构（`src/`）
 
-- `constants.ts`：单一事实源。定义工具名 `TOOL_NAME = "workspace_semantic_search"`、默认底层中继 ID `DEFAULT_RELAY_TOOL_ID = "copilot_searchCodebase"`、截断上限 `MAX_RESULT_CHARACTERS_LIMIT = 60000`、超时上下限（5s~180s）与命令 ID 常量。
+- `constants.ts`：单一事实源。定义工具名 `TOOL_NAME = "workspace_semantic_search"`、默认底层中继 ID `DEFAULT_RELAY_TOOL_ID = "copilot_searchCodebase"`、超时上下限（5s~180s）与命令 ID 常量。
 - `types.ts`：定义入参结构 `SemanticSearchInput`、结果联合 `SearchOutcome`（`ok` / `empty` / `failed`）以及结构化失败类型 `RelayFailureKind`（`tool-missing` / `not-ready` / `timeout` / `invalid-input` / `relay-error`）。
 - `relay/`：
   - `ports.ts`：定义 `ToolHost` 与 `CommandHost` 接口，隔离直接对 `vscode.lm` 与 `vscode.commands` 的硬依赖；
   - `toolResolver.ts`：按候选列表解析底层工具，包含严格的自引用排除守卫（防止递归调用自身），支持注册名与 `toolReferenceName` 兜底；
   - `semanticSearchRelay.ts`：编排参数规整（剥离 `#codebase`）、目录范围判定、带 `CancellationTokenSource` 的超时中继调用；修复了超时与外层取消的竞态判定；对未就绪状态映射为 `not-ready`；
-  - `resultAdapter.ts`：递归解析多态 `PromptTsx` 和文本内容，并实施 60,000 字符上限截断防护；
+  - `resultAdapter.ts`：深度遍历多态 `PromptTsx` AST 树（容纳 48 层嵌套组件深度），100% 无损原样透传底层代码正文，不实施人为字符截断（见 ADR-0003）；
   - `relayFailure.ts`：根据失败类型格式化可执行的降级提示（建议 Agent 改用 `grep_search` / `file_search`，避免陷入重试死循环）。
 - `tools/semanticSearchTool.ts`：实现 `vscode.LanguageModelTool<SemanticSearchInput>`，包含防御性 `prepareInvocation`。
-- `statusbar/indexStatusBar.ts`：右下角状态栏快捷入口与管理菜单，内部持久化 `currentState`，使用稳定枚举 `id` 派发命令。
+- `statusbar/indexStatusBar.ts`：右下角状态栏快捷入口与管理菜单，采用极简双状态模型（`idle` 与 `indexing`，见 ADR-0004），使用稳定枚举 `id` 派发命令。
 - `commands/`：
   - `buildIndexCommand.ts`：转发触发 Copilot 建立远端工作区索引（`github.copilot.buildRemoteWorkspaceIndex`）；
   - `diagnosticsCommand.ts`：在输出面板 `Agent Semantic Search` 打印 LM 工具注册与配置快照。

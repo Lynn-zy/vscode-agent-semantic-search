@@ -3,8 +3,6 @@
  * @description 工具返回数据适配器：负责将底层返回的多态部件（文本、PromptTsx等）规整抽取为 Markdown 文本
  */
 
-import { MAX_RESULT_CHARACTERS_LIMIT } from "../constants";
-
 /**
  * 递归展平 PromptTsx 树状节点为纯文本/Markdown
  * @param node 当前节点
@@ -124,12 +122,6 @@ export function adaptContentToMarkdown(
     .map((snippet) => snippet.trim())
     .filter((snippet) => snippet.length > 0)
     .join("\n\n");
-
-  // 防止超长代码片段填满模型上下文窗口，实施安全阈值截断保护
-  if (fullText.length > MAX_RESULT_CHARACTERS_LIMIT) {
-    const truncated = fullText.slice(0, MAX_RESULT_CHARACTERS_LIMIT);
-    return `${truncated}\n\n⚠️ 【内容超出上限已截断】：原始代码检索结果共 ${fullText.length} 字符，已截取前 ${MAX_RESULT_CHARACTERS_LIMIT} 字符以节省上下文窗口。建议在提问时限定 scopedDirectories 目录范围或提供更具体的查询描述。`;
-  }
 
   return fullText;
 }

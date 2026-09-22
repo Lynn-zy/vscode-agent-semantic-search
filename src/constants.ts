@@ -60,11 +60,6 @@ export const MIN_TIMEOUT_MILLISECONDS = 5000;
 export const MAX_TIMEOUT_MILLISECONDS = 180000;
 
 /**
- * 结果 Markdown 字符数量上限（防止模型上下文被超大代码块填满）
- */
-export const MAX_RESULT_CHARACTERS_LIMIT = 60000;
-
-/**
  * 状态栏项对齐优先级
  */
 export const STATUS_BAR_ALIGNMENT_PRIORITY = 100;

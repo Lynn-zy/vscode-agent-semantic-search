@@ -56,14 +56,18 @@ test("Regression 2: 正确支持传统 LanguageModelTextPart 与纯字符串部�
   );
 });
 
-test("Regression 3: 超出字符上限时实施防御性截断", () => {
-  const hugeText = "A".repeat(70000);
+test("Regression 3: 大文本代码块全量保留，中继层不实施人工截断", () => {
+  const hugeText = "const data = '" + "A".repeat(70000) + "';";
   const part = { text: hugeText };
 
   const markdown = adaptContentToMarkdown([part]);
 
-  assert.equal(markdown.includes("【内容超出上限已截断】"), true);
-  assert.equal(markdown.length < 65000, true);
+  assert.equal(
+    markdown.length >= 70000,
+    true,
+    "中继层必须无损原样透传，不得强行截断代码正文",
+  );
+  assert.equal(markdown.includes("【内容超出上限已截断】"), false);
 });
 
 test("Regression 4: 空输入或空部件安全返回空字符串", () => {
