@@ -35,6 +35,10 @@ export class ConfigService {
       "showDegradationHints",
       true,
     );
+    const appendCodeUsagesHint = configuration.get<boolean>(
+      "appendCodeUsagesHint",
+      true,
+    );
     const relayToolId = configuration.get<string>(
       "relayToolId",
       DEFAULT_RELAY_TOOL_ID,
@@ -50,6 +54,7 @@ export class ConfigService {
       timeoutMs: clampedTimeoutMs,
       statusBarEnabled,
       showDegradationHints,
+      appendCodeUsagesHint,
       relayToolId: relayToolId.trim() || DEFAULT_RELAY_TOOL_ID,
     };
   }

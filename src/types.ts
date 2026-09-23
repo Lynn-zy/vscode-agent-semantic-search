@@ -93,6 +93,11 @@ export interface ExtensionConfig {
   readonly showDegradationHints: boolean;
 
   /**
+   * 检索成功命中代码切片时，是否向 Agent 额外追加使用 vscode_listCodeUsages 追踪引用的提示
+   */
+  readonly appendCodeUsagesHint: boolean;
+
+  /**
    * 底层中继的工具注册 ID
    */
   readonly relayToolId: string;

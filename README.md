@@ -63,6 +63,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
    - `semanticSearch.timeoutMs`: Timeout threshold for single relay search (default `45000` ms).
    - `semanticSearch.statusBar.enabled`: Toggle status bar entry visibility.
    - `semanticSearch.showDegradationHints`: Toggle whether to append fallback suggestions on empty or failed searches.
+   - `semanticSearch.appendCodeUsagesHint`: Toggle whether to append an actionable hint suggesting `vscode_listCodeUsages` to the Agent when code excerpts are found (default `true`).
    - `semanticSearch.relayToolId`: Target underlying tool ID (default `copilot_searchCodebase`).
 
 ### Usage
@@ -75,7 +76,8 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 #### 2. How to Use
 
 - **Autonomous Agent Invocation**: In any VS Code Agent / Chat conversation, models will automatically call the `semanticSearch` tool when searching for code by concept or logic;
-- **Explicit Reference**: Type `#semanticSearch` in the Chat input box to directly attach semantic search context.
+- **Explicit Reference**: Type `#semanticSearch` in the Chat input box to directly attach semantic search context;
+- **Seamless Symbol Usages Tracing**: When code excerpts are found, the Agent can seamlessly invoke `vscode_listCodeUsages` using the returned `filePath`, `symbol`, and `lineContent` to trace callers, references, and blast radius across the project.
 
 ---
 
@@ -136,6 +138,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
    - `semanticSearch.timeoutMs`：自定义单次检索超时（默认 45000 毫秒）。
    - `semanticSearch.statusBar.enabled`：状态栏图标显隐。
    - `semanticSearch.showDegradationHints`：结果为空或检索失败时，是否向模型附带下一步排查与降级建议。
+   - `semanticSearch.appendCodeUsagesHint`：检索成功命中代码切片时，是否向 Agent 追加结合 `vscode_listCodeUsages` 追踪引用的操作指引（默认 `true`）。
    - `semanticSearch.relayToolId`：底层中继目标工具 ID（默认 `copilot_searchCodebase`）。
 
 ### 使用说明
@@ -148,7 +151,8 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 #### 2. 使用方式
 
 - **Agent 自主调用**：在任何 VS Code Agent / Chat 会话中，当遇到需要按功能意图检索代码时，模型会自动调用 `semanticSearch` 工具；
-- **提示词显式引用**：在 Chat 输入框中键入 `#semanticSearch`，即可显式引用本工具并附带查询上下文。
+- **提示词显式引用**：在 Chat 输入框中键入 `#semanticSearch`，即可显式引用本工具并附带查询上下文；
+- **无缝符号引用追踪**：检索返回相关代码片段后，Agent 可直接利用切片包含的文件路径、符号名与行内容，精准调用 `vscode_listCodeUsages` 追踪全库调用链与影响面。
 
 ---
 

@@ -144,11 +144,28 @@ const window = {
   }),
 };
 
+let mockConfigurationValues = new Map();
+
 const workspace = {
   workspaceFolders: [],
-  getConfiguration: () => ({
-    get: (key, defaultValue) => defaultValue,
+  getConfiguration: (section) => ({
+    get: (key, defaultValue) => {
+      const fullKey = section ? `${section}.${key}` : key;
+      if (mockConfigurationValues.has(key)) {
+        return mockConfigurationValues.get(key);
+      }
+      if (mockConfigurationValues.has(fullKey)) {
+        return mockConfigurationValues.get(fullKey);
+      }
+      return defaultValue;
+    },
   }),
+  _setMockConfig: (key, value) => {
+    mockConfigurationValues.set(key, value);
+  },
+  _clearMockConfig: () => {
+    mockConfigurationValues.clear();
+  },
   onDidChangeConfiguration: () => new MockDisposable(),
 };
 

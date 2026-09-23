@@ -49,7 +49,7 @@
 
 ### 3.2 自动化测试设施（`test/`）
 
-全库构建了脱机运行的轻量级测试体系，覆盖全部 6 大核心模块（共 33 项测试全部通过）：
+全库构建了脱机运行的轻量级测试体系，覆盖全部 6 大核心模块（共 35 项测试全部通过）：
 
 - `test/mocks/vscode.cjs`：提供轻量级 Node.js 运行时 Mock（含 `commands`、`window`、`workspace`、`CancellationTokenSource`、`CancellationError`、`LanguageModelPromptTsxPart` 等）；
 - `test/buildIndexFeedbackLoop.test.mjs`：测试索引构建反馈循环、生命周期状态演进与防重入守卫；
@@ -57,7 +57,7 @@
 - `test/resultAdapter.test.mjs`：测试多态 PromptTsx 树深层展平与无损透传；
 - `test/semanticSearchRelay.test.mjs`：测试核心规整、超时竞态、取消、未就绪判定（ADR-0002）与目录 Schema 适配；
 - `test/toolResolver.test.mjs`：测试工具别名匹配与自引用排除逻辑；
-- `test/semanticSearchTool.test.mjs`：测试原生多态部件直接透传与降级提示分支。
+- `test/semanticSearchTool.test.mjs`：测试原生多态部件直接透传、降级提示分支与 `appendCodeUsagesHint` 配置切换。
 
 ### 3.3 关键配置（`package.json`）
 

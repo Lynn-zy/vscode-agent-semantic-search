@@ -8,6 +8,7 @@ import { SemanticSearchInput } from "../types";
 import { ConfigService } from "../config/configService";
 import { SemanticSearchRelay } from "../relay/semanticSearchRelay";
 import { presentOutcome } from "../relay/outcomePresenter";
+import { CODE_USAGES_HINT_FOR_AGENT } from "../constants";
 
 /**
  * 语义检索工具类：实现 VS Code LanguageModelTool 规范接口
@@ -46,15 +47,35 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
       outcome.rawContent &&
       outcome.rawContent.length > 0
     ) {
-      return new vscode.LanguageModelToolResult(
-        outcome.rawContent as (
+      const parts: (
+        vscode.LanguageModelTextPart | vscode.LanguageModelPromptTsxPart
+      )[] = [
+        ...(outcome.rawContent as (
           vscode.LanguageModelTextPart | vscode.LanguageModelPromptTsxPart
-        )[],
-      );
+        )[]),
+      ];
+
+      // 若用户显式开启 appendCodeUsagesHint，在 AST 部件之后安全追加轻量符号引用指引
+      // 提示文本仅约 180 字节，远低于 8KB 落盘阈值，走 onText 绝不落盘
+      if (config.appendCodeUsagesHint) {
+        parts.push(
+          new vscode.LanguageModelTextPart(CODE_USAGES_HINT_FOR_AGENT),
+        );
+      }
+
+      return new vscode.LanguageModelToolResult(parts);
     }
 
-    // 当检索无匹配（empty）或发生异常（failed）时，经由呈现深模块格式化为短文本 Markdown 降级提示
+    // 当检索成功但 rawContent 缺失（如特定环境或 Mock），或检索无匹配（empty）/异常（failed）时：
     const markdown = presentOutcome(outcome, config);
+
+    // 仅在检索命中（ok）且开启配置时追加符号引用提示；空结果或失败时不追加
+    if (outcome.status === "ok" && config.appendCodeUsagesHint) {
+      return new vscode.LanguageModelToolResult([
+        new vscode.LanguageModelTextPart(markdown),
+        new vscode.LanguageModelTextPart(CODE_USAGES_HINT_FOR_AGENT),
+      ]);
+    }
 
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(markdown),

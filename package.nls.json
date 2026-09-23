@@ -3,7 +3,7 @@
   "extension.description": "Enables VS Code Agents to autonomously perform codebase semantic searches via the semanticSearch tool.",
   "tools.semanticSearch.displayName": "Workspace Code Semantic Search",
   "tools.semanticSearch.userDescription": "Allow Agent to search codebase snippets using semantic search.",
-  "tools.semanticSearch.modelDescription": "Run a semantic search for relevant code snippets and architecture concepts across the current workspace. Use this when you know functional intents or business logic but not exact symbol names. Do not use when exact paths or keywords are already known.",
+  "tools.semanticSearch.modelDescription": "Run a semantic search for relevant code snippets and architecture concepts across the current workspace. Use this when you know functional intents or business logic but not exact symbol names. Do not use when exact paths or keywords are already known. After obtaining code excerpts, if you need to trace callers or assess blast radius of specific symbols, combine with `vscode_listCodeUsages` for further analysis.",
   "tools.semanticSearch.query.description": "Natural language query or concept description (e.g. 'user permission verification logic', 'websocket reconnection').",
   "tools.semanticSearch.scopedDirectories.description": "Optional list of directories to limit the search scope (relative or absolute paths). Defaults to whole workspace.",
   "commands.category": "Semantic Search",
@@ -14,5 +14,6 @@
   "config.statusBar.enabled.description": "Whether to display the semantic search status and quick actions entry in the status bar.",
   "config.timeoutMs.description": "Timeout limit for a single relay search in milliseconds (recommend 30000~60000ms).",
   "config.showDegradationHints.description": "Whether to append actionable diagnostic and fallback suggestions to the Agent when results are empty or search fails.",
+  "config.appendCodeUsagesHint.description": "Whether to append an actionable hint suggesting `vscode_listCodeUsages` to the Agent when code excerpts are found.",
   "config.relayToolId.description": "Registered tool ID of the underlying relay target tool."
 }

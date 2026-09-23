@@ -63,3 +63,9 @@ export const MAX_TIMEOUT_MILLISECONDS = 180000;
  * 状态栏项对齐优先级
  */
 export const STATUS_BAR_ALIGNMENT_PRIORITY = 100;
+
+/**
+ * 检索命中后可选追加的符号引用工具操作指引（面向 Agent 模型，统一采用英文）
+ */
+export const CODE_USAGES_HINT_FOR_AGENT =
+  "💡 Hint: If you need to trace callers, assess blast radius, or find implementations of symbols in these excerpts, you can use `vscode_listCodeUsages` with the matching `filePath`, `symbol`, and `lineContent`.";
