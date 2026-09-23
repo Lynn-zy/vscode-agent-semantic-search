@@ -30,12 +30,12 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 
 #### Tool Comparison Matrix
 
-| Tool                            | Principle                              | Best Used When...                                                                           | Index Required?                   |
-| :------------------------------ | :------------------------------------- | :------------------------------------------------------------------------------------------ | :-------------------------------- |
-| **`semanticSearch`**            | Vector Embedding & Semantic Similarity | You know the feature intent or logic concept, but don't know the symbol names or file paths | **Yes** (Codebase Semantic Index) |
-| **`grep_search` / Text Search** | Literal String & Regex Matching        | You know the exact function, identifier, error string, or pattern                           | No                                |
-| **`file_search`**               | Glob Pattern & Filename Matching       | You want to locate files by name or path pattern (`**/*.service.ts`)                        | No                                |
-| **`usages`**                    | Code Intelligence / Language Server    | You need to trace definitions, references, or implementations of a known symbol             | Language Server                   |
+| Tool                        | Principle                              | Best Used When...                                                                           | Index Required?                   |
+| :-------------------------- | :------------------------------------- | :------------------------------------------------------------------------------------------ | :-------------------------------- |
+| **`semanticSearch`**        | Vector Embedding & Semantic Similarity | You know the feature intent or logic concept, but don't know the symbol names or file paths | **Yes** (Codebase Semantic Index) |
+| **`grep_search`**           | Literal String & Regex Matching        | You know the exact function, identifier, error string, or pattern                           | No                                |
+| **`file_search`**           | Glob Pattern & Filename Matching       | You want to locate files by name or path pattern (`**/*.service.ts`)                        | No                                |
+| **`vscode_listCodeUsages`** | Code Intelligence / Language Server    | You need to trace definitions, references, or implementations of a known symbol             | Language Server                   |
 
 ---
 
@@ -93,7 +93,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 
 1. **语义搜索（`#codebase` / `semanticSearch`）**：按**自然语言意图和业务概念**检索代码，而不是局限于字面关键词（例如查询 _“身份认证拦截器在哪”_、_“支付模块异常处理流程”_）。
 2. **文本搜索 / Grep（`grep_search`）**：一旦初步锁定了概念或关键符号名，用精确字符串或正则表达式排查具体的语法结构和引用。
-3. **符号与引用分析（`usages`）**：结合查找所有引用、接口实现与定义跳转，追踪符号在各文件中的调用与依赖关系。
+3. **符号与引用分析（`vscode_listCodeUsages`）**：结合查找所有引用、接口实现与定义跳转，追踪符号在各文件中的调用与依赖关系。
 4. **文件搜索（`file_search`）**：按名称或 glob 路径模式匹配相关联的配置文件或测试用例。
 5. **文件读取（`read_file`）**：定位具体文件行范围并执行协同代码编辑。
 
@@ -105,12 +105,12 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 
 #### 工具能力对比矩阵
 
-| 工具                         | 检索原理                | 最佳适用场景                                           | 是否依赖索引                                     |
-| :--------------------------- | :---------------------- | :----------------------------------------------------- | :----------------------------------------------- |
-| **`semanticSearch`**         | 向量嵌入与语义相似度    | 明确业务意图或功能概念，但**未知**具体符号名或文件路径 | **是**（代码库语义索引 Codebase Semantic Index） |
-| **`grep_search` / 文本搜索** | 字符串字面量 / 正则匹配 | 已知确切的函数名、变量名、错误码或正则文本             | 否                                               |
-| **`file_search`**            | 文件名 / Glob 模式      | 按文件名规则筛选文件列表（如 `**/*.controller.ts`）    | 否                                               |
-| **`usages`**                 | 代码智能与语言服务(AST) | 跨文件追溯已知符号的定义、调用路径与引用链             | 依赖语言服务（Language Server）                  |
+| 工具                        | 检索原理                | 最佳适用场景                                           | 是否依赖索引                                     |
+| :-------------------------- | :---------------------- | :----------------------------------------------------- | :----------------------------------------------- |
+| **`semanticSearch`**        | 向量嵌入与语义相似度    | 明确业务意图或功能概念，但**未知**具体符号名或文件路径 | **是**（代码库语义索引 Codebase Semantic Index） |
+| **`grep_search`**           | 字符串字面量 / 正则匹配 | 已知确切的函数名、变量名、错误码或正则文本             | 否                                               |
+| **`file_search`**           | 文件名 / Glob 模式      | 按文件名规则筛选文件列表（如 `**/*.controller.ts`）    | 否                                               |
+| **`vscode_listCodeUsages`** | 代码智能与语言服务(AST) | 跨文件追溯已知符号的定义、调用路径与引用链             | 依赖语言服务（Language Server）                  |
 
 ---
 

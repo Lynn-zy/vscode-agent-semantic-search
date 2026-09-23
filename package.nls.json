@@ -3,7 +3,7 @@
   "extension.description": "Enables VS Code Agents to autonomously perform codebase semantic searches via the semanticSearch tool.",
   "tools.semanticSearch.displayName": "Workspace Code Semantic Search",
   "tools.semanticSearch.userDescription": "Allow Agent to search codebase snippets using semantic search.",
-  "tools.semanticSearch.modelDescription": "Run a semantic search for relevant code snippets and architecture concepts across the current workspace. Use this when you know functional intents or business logic but not exact symbol names. Do not use when exact paths or keywords are already known. After obtaining code excerpts, if you need to trace callers or assess blast radius of specific symbols, combine with `vscode_listCodeUsages` for further analysis.",
+  "tools.semanticSearch.modelDescription": "Primary tool for codebase semantic exploration. Run a natural language search for relevant code snippets, architecture concepts, or business logic across the current workspace. After obtaining code excerpts, if you need to trace callers or assess blast radius of specific symbols, combine with `vscode_listCodeUsages` for further analysis.",
   "tools.semanticSearch.query.description": "Natural language query or concept description (e.g. 'user permission verification logic', 'websocket reconnection').",
   "tools.semanticSearch.scopedDirectories.description": "Optional list of directories to limit the search scope (relative or absolute paths). Defaults to whole workspace.",
   "commands.category": "Semantic Search",

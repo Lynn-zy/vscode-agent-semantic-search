@@ -3,7 +3,7 @@
   "extension.description": "让 VS Code Agent 能够自主调用工作区代码语义检索工具（semanticSearch）",
   "tools.semanticSearch.displayName": "工作区代码语义检索",
   "tools.semanticSearch.userDescription": "允许 Agent 使用语义搜索检索工作区代码片段。",
-  "tools.semanticSearch.modelDescription": "按语义与概念检索当前工作区代码，返回高相关度的文件代码片段。当你知道功能意图或业务逻辑、但不知道具体函数名或文件名时使用此工具。不要在已知确定文件路径或已知精确关键词时使用。检索到代码片段后，若需追踪特定符号的调用方或评估修改影响面，可结合 `vscode_listCodeUsages` 工具进一步分析。",
+  "tools.semanticSearch.modelDescription": "探索与检索工作区代码库时的首选语义检索工具。用于按自然语言意图、业务逻辑或功能概念快速定位相关代码片段与架构设计。检索到代码片段后，若需追踪特定符号的调用方或评估修改影响面，结合 `vscode_listCodeUsages` 工具进一步分析。",
   "tools.semanticSearch.query.description": "自然语言查询或概念描述，例如：'用户登录权限校验逻辑'、'WebSocket 重连机制'。",
   "tools.semanticSearch.scopedDirectories.description": "可选参数：限定检索的文件目录范围（相对路径或绝对路径）。若未提供则检索整个工作区。",
   "commands.category": "语义搜索",
