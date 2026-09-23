@@ -56,6 +56,11 @@ export type SearchOutcome =
       readonly status: "ok";
       readonly markdown: string;
       readonly elapsedMs: number;
+      /**
+       * 底层检索工具返回的原生多态部件数组（如 LanguageModelPromptTsxPart 等）
+       * 用于在工具调用入口处优先原样透传，避免强制展平为超长纯文本触发 8KB 临时文件落盘
+       */
+      readonly rawContent?: readonly unknown[];
     }
   | {
       readonly status: "empty";

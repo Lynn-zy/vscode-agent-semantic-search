@@ -37,7 +37,23 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
       options.toolInvocationToken,
     );
 
-    // 经由呈现深模块统一规整为面向模型的 Markdown 纯文本
+    // 关键路径优化：当检索命中且底层返回了原生多态部件（如 LanguageModelPromptTsxPart）时，
+    // 优先原样透传底层原生部件，保持与官方 semantic_search 完全一致的 AST 渲染链路。
+    // 这既能完整继承底层内置的 <TokenLimit> 预算管控，又彻底避免了因展平成超长纯文本（>8KB）
+    // 而触发 Copilot Chat 运行时的磁盘转储保护（写入 content.txt 临时文件并要求 Agent 用 read_file 读取）。
+    if (
+      outcome.status === "ok" &&
+      outcome.rawContent &&
+      outcome.rawContent.length > 0
+    ) {
+      return new vscode.LanguageModelToolResult(
+        outcome.rawContent as (
+          vscode.LanguageModelTextPart | vscode.LanguageModelPromptTsxPart
+        )[],
+      );
+    }
+
+    // 当检索无匹配（empty）或发生异常（failed）时，经由呈现深模块格式化为短文本 Markdown 降级提示
     const markdown = presentOutcome(outcome, config);
 
     return new vscode.LanguageModelToolResult([

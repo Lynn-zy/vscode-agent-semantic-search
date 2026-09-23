@@ -93,6 +93,24 @@ class MockCancellationError extends Error {
   }
 }
 
+class MockLanguageModelTextPart {
+  constructor(value) {
+    this.value = value;
+  }
+}
+
+class MockLanguageModelPromptTsxPart {
+  constructor(value) {
+    this.value = value;
+  }
+}
+
+class MockLanguageModelToolResult {
+  constructor(content) {
+    this.content = Array.isArray(content) ? content : [content];
+  }
+}
+
 const registeredCommands = new Map();
 
 const commands = {
@@ -162,4 +180,7 @@ module.exports = {
   MarkdownString: MockMarkdownString,
   CancellationTokenSource: MockCancellationTokenSource,
   CancellationError: MockCancellationError,
+  LanguageModelTextPart: MockLanguageModelTextPart,
+  LanguageModelPromptTsxPart: MockLanguageModelPromptTsxPart,
+  LanguageModelToolResult: MockLanguageModelToolResult,
 };

@@ -6,6 +6,32 @@
 
 ---
 
+## [0.1.2] - 2026-09-23
+
+### 修复与优化 (Fixed)
+
+- **对齐官方语义检索直接呈现行为，消除超大文本临时文件落盘**：
+  - 深入排查 VS Code Copilot 运行时工具渲染分流机制（`onTSX` vs `onText`），定位此前将多态 AST 展平为单一超长纯文本 `LanguageModelTextPart` 并在超过 8KB 时被 Copilot 强制写入 `content.txt` 临时文件的根因；
+  - 在 `SearchOutcome.ok` 领域契约中扩充 `rawContent` 字段，在中继执行命中时完整保留底层返回的原生多态部件；
+  - 优化 `SemanticSearchTool.invoke` 关键路径：检索成功且包含底层原生多态部件（如 `LanguageModelPromptTsxPart`）时，直接透传原生部件至 `LanguageModelToolResult`，完整继承底层 `<TokenLimit>` 预算管控并绕开 Copilot 8KB 纯文本转储拦截，实现与官方 `semantic_search` 100% 一致的代码片段直接输出体验；
+  - 保留空结果（`empty`）与检索失败（`failed`）时的短文本 `LanguageModelTextPart` 降级建议直接呈现。
+
+### 文档更新 (Documentation)
+
+- **官方规范对齐与原理解读**：
+  - 参考官方 [VS Code Workspace Context - Semantic Search](https://code.visualstudio.com/docs/agents/reference/workspace-context#_semantic-search) 文档，在 `README.md` 中英双语部分补充“什么是语义检索？为什么 Agent 需要它？”章节以及工具能力对比矩阵；
+  - 剥离非官方提供的外部工具描述，聚焦 VS Code 原生工具集的协同工作流；
+  - 更新 ADR-0003 为《中继层无损透传，不实施人工字符数截断与纯文本强转》。
+
+### 测试与质量 (Tests)
+
+- **测试基础设施扩充**：
+  - 在 `test/mocks/vscode.cjs` 中补齐 `LanguageModelPromptTsxPart`、`LanguageModelTextPart` 与 `LanguageModelToolResult` 轻量 Mock；
+  - 新增 `test/semanticSearchTool.test.mjs` 测试套件，构建红绿快速反馈循环，严格验证工具层原生部件直接透传与短文本降级分支；
+  - 在 `test/semanticSearchRelay.test.mjs` 中补充 `rawContent` 原始部件透传断言，全量自动化测试扩充至 33 项并保持秒级通过。
+
+---
+
 ## [0.1.1] - 2026-09-22
 
 ### 修复与规范 (Fixed)

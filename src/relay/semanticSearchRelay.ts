@@ -330,6 +330,8 @@ export class SemanticSearchRelay {
       status: "ok",
       markdown: markdownContent,
       elapsedMs,
+      // 保留底层返回的原生部件（如 LanguageModelPromptTsxPart），供工具层直接透传
+      rawContent: rawResult.content,
     };
   }
 }

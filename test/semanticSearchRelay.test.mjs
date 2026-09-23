@@ -142,6 +142,7 @@ test("SemanticSearchRelay 5: 底层调用成功且有代码时返回 ok 与规�
 
   assert.equal(outcome.status, "ok");
   assert.equal(outcome.markdown, "export const a = 1;");
+  assert.deepEqual(outcome.rawContent, ["export const a = 1;"]);
   assert.equal(typeof outcome.elapsedMs, "number");
   assert.equal(invokedPayload.query, "export a");
   assert.ok(Array.isArray(invokedPayload.scopedDirectories));
