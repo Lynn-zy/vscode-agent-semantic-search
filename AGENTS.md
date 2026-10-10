@@ -10,4 +10,4 @@ Issues 与 spec 存放在本仓库的 GitHub Issues（用 `gh` CLI 操作）。�
 
 ### Domain docs
 
-单上下文（single-context）布局：根目录 `CONTEXT.md` + `docs/adr/`。见 `docs/agents/domain.md`。
+单上下文（single-context）布局：根目录 `GLOSSARY.md` + `docs/adr/`。见 `docs/agents/domain.md`。

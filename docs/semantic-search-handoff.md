@@ -123,7 +123,7 @@
 ### 5.2 架构与领域建模技能（Architecture & Domain Skills）
 
 - **`domain-modeling`**：
-  - **用途**：维护单上下文领域模型。当重构调整领域概念、新增失败分类或更新规则时，用于同步维护根目录 [CONTEXT.md](CONTEXT.md) 与 [docs/adr/](docs/adr/) 架构决策记录，杜绝术语分叉。
+  - **用途**：维护单上下文领域模型。当重构调整领域概念、新增失败分类或更新规则时，用于同步维护根目录 [GLOSSARY.md](GLOSSARY.md) 与 [docs/adr/](docs/adr/) 架构决策记录，杜绝术语分叉。
 - **`codebase-design`**：
   - **用途**：深模块与接缝纪律设计。用于审视模块深度（Depth）、避免浅层透传（Shallow Wrapper）、消除跨模块知识泄漏，以及保持“测试面即接口（The interface is the test surface）”的高杠杆设计。
 - **`code-review`**：
