@@ -11,6 +11,7 @@ import { VsCodeCommandHost } from "./adapters/vsCodeCommandHost";
 import { SemanticSearchRelay } from "./relay/semanticSearchRelay";
 import { SemanticSearchTool } from "./tools/semanticSearchTool";
 import { registerBuildIndexCommand } from "./commands/buildIndexCommand";
+import { registerResetIndexCacheCommand } from "./commands/resetIndexCacheCommand";
 import { registerDiagnosticsCommand } from "./commands/diagnosticsCommand";
 import { IndexStatusBar } from "./statusbar/indexStatusBar";
 
@@ -44,6 +45,9 @@ export function activate(context: vscode.ExtensionContext): void {
   // 5. 注册命令处理程序
   context.subscriptions.push(
     registerBuildIndexCommand(commandHost, logger, statusBar),
+  );
+  context.subscriptions.push(
+    registerResetIndexCacheCommand(commandHost, logger, statusBar),
   );
   context.subscriptions.push(registerDiagnosticsCommand(commandHost, logger));
 

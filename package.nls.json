@@ -8,6 +8,7 @@
   "tools.semanticSearch.scopedDirectories.description": "Optional list of directories to limit the search scope (relative or absolute paths). Defaults to whole workspace.",
   "commands.category": "Semantic Search",
   "commands.buildIndex.title": "Build Codebase Index",
+  "commands.resetIndexCache.title": "Reset Remote Index Cache",
   "commands.collectDiagnostics.title": "Collect Index Diagnostics",
   "commands.showMenu.title": "Open Management Menu",
   "config.title": "Semantic Search",

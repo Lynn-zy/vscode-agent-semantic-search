@@ -56,6 +56,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
    - **Binary Status Bar**: Displays clean states: Ready (`$(search) Semantic Search`) and Building (`$(sync~spin) Semantic Search: Indexing...`).
    - **Quick Actions Menu**: Click status bar item or open Command Palette to:
      - `Semantic Search: Build Codebase Index` (trigger Copilot codebase index build with concurrency protection)
+     - `Semantic Search: Reset Remote Index Cache` (clear remote cached codebase index for rebuilding after failures)
      - `Semantic Search: Collect Index Diagnostics` (generate instant diagnostic report)
      - `Semantic Search: Open Management Menu`
 
@@ -73,10 +74,26 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 - Install and enable the **GitHub Copilot Chat** extension (provides underlying embedding and index services);
 - Build the codebase semantic index for your workspace (via the status bar entry or Command Palette `Semantic Search: Build Codebase Index`).
 
-#### 2. How to Use
+#### 2. Enabling the Tool for Agents (Crucial Step)
+
+To allow your AI Agent to autonomously use this tool, you must enable it in the tools configuration panel:
+
+1. Open the Chat / Agent view in VS Code;
+2. Open the **Tools Configuration** panel (via the settings ⚙️ or tools icon in the chat prompt);
+3. In the tools list, locate and check **`Agent Semantic Search Bridge`** (ensure the sub-item `semanticSearch` is checked);
+4. Click **OK** to save changes.
+
+<p align="center">
+  <img src="zh.png" alt="Configure Tools - Enable Agent Semantic Search Bridge" width="700" />
+</p>
+
+> **Note**: Tools are only accessible to the Agent when enabled in this configuration panel. Once checked, the Agent will autonomously invoke `semanticSearch` when navigating code by concept.
+
+#### 3. How to Use
 
 - **Autonomous Agent Invocation**: In any VS Code Agent / Chat conversation, models will automatically call the `semanticSearch` tool when searching for code by concept or logic;
 - **Explicit Reference**: Type `#semanticSearch` in the Chat input box to directly attach semantic search context;
+- **Cache Reset & Rebuild**: If index construction fails or the remote index gets corrupted/out of sync, select `Semantic Search: Reset Remote Index Cache` from the status bar menu to purge the remote cache before re-indexing;
 - **Seamless Symbol Usages Tracing**: When code excerpts are found, the Agent can seamlessly invoke `vscode_listCodeUsages` using the returned `filePath`, `symbol`, and `lineContent` to trace callers, references, and blast radius across the project.
 
 ---
@@ -131,6 +148,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
    - **双状态模型**：状态栏仅维护就绪态（`$(search) 语义搜索`）与构建中态（`$(sync~spin) 语义搜索: 构建索引中`），不被单次瞬态结果干扰。
    - **快捷管理菜单**：点击状态栏图标或通过命令面板快速执行：
      - `语义搜索：构建工作区代码库索引`（带防重入保护）
+     - `语义搜索：重置远程索引缓存`（清理远端缓存的索引，以便在构建失败或异常时快速清空并支持重建）
      - `语义搜索：收集工作区索引诊断信息`（一键生成环境工具与配置诊断报告）
      - `语义搜索：打开管理菜单`
 
@@ -148,10 +166,26 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
 - 安装并启用 **GitHub Copilot Chat** 扩展（本插件依赖底层代码库语义索引服务）；
 - 在当前工作区中完成代码库语义索引构建（可通过右下角状态栏或命令面板执行 `构建工作区代码库索引`）。
 
-#### 2. 使用方式
+#### 2. 为 Agent 启用该工具（关键配置）
 
-- **Agent 自主调用**：在任何 VS Code Agent / Chat 会话中，当遇到需要按功能意图检索代码时，模型会自动调用 `semanticSearch` 工具；
+要在配置工具面板中勾选 **`Agent Semantic Search Bridge`** 项（图片见 [zh.png](zh.png)）才能为对应的 Agent 启用该工具：
+
+1. 在 VS Code 中打开 AI Chat / Agent 聊天视图；
+2. 打开**“配置工具”**面板（点击输入框附近的工具管理图标或设置 ⚙️ 按钮）；
+3. 在工具列表中找到并勾选 **`Agent Semantic Search Bridge`** 项（确保其子功能 `semanticSearch` 处于勾选启用状态）；
+4. 点击右上角**“确定”**保存配置。
+
+<p align="center">
+  <img src="zh.png" alt="配置工具面板 - 勾选启用 Agent Semantic Search Bridge" width="700" />
+</p>
+
+> **重要提示**：只有在配置工具面板中勾选了 **`Agent Semantic Search Bridge`**，对应的 Agent 才能在会话中获得该工具的调用权限，并在探索代码库时自主调用 `semanticSearch`。
+
+#### 3. 使用方式
+
+- **Agent 自主调用**：在任何 VS Code Agent / Chat 会话中，当遇到需要按功能意图或业务逻辑检索代码时，模型会自动调用 `semanticSearch` 工具；
 - **提示词显式引用**：在 Chat 输入框中键入 `#semanticSearch`，即可显式引用本工具并附带查询上下文；
+- **重置与清理缓存**：当代码库索引构建失败、内容卡死或远端缓存与本地代码严重脱节时，点击状态栏菜单中的 `重置远程索引缓存` 快速清理远端脏缓存，随后重新发起构建；
 - **无缝符号引用追踪**：检索返回相关代码片段后，Agent 可直接利用切片包含的文件路径、符号名与行内容，精准调用 `vscode_listCodeUsages` 追踪全库调用链与影响面。
 
 ---

@@ -36,9 +36,17 @@ export const DIAGNOSTICS_COMMAND_CANDIDATES: readonly string[] = [
 ];
 
 /**
+ * 尝试触发重置并清理远程索引缓存的候选命令 ID 列表（当前 Copilot 版本有效命令）
+ */
+export const DELETE_INDEX_CACHE_COMMAND_CANDIDATES: readonly string[] = [
+  "github.copilot.deleteExternalIngestWorkspaceIndex",
+];
+
+/**
  * 插件命令 ID 单一事实源
  */
 export const COMMAND_BUILD_INDEX = "semanticSearch.buildIndex";
+export const COMMAND_RESET_INDEX_CACHE = "semanticSearch.resetIndexCache";
 export const COMMAND_COLLECT_DIAGNOSTICS =
   "semanticSearch.collectIndexDiagnostics";
 export const COMMAND_SHOW_MENU = "semanticSearch.showMenu";

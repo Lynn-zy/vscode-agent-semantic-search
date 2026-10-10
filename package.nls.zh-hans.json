@@ -8,6 +8,7 @@
   "tools.semanticSearch.scopedDirectories.description": "可选参数：限定检索的文件目录范围（相对路径或绝对路径）。若未提供则检索整个工作区。",
   "commands.category": "语义搜索",
   "commands.buildIndex.title": "构建工作区代码库索引",
+  "commands.resetIndexCache.title": "重置远程索引缓存",
   "commands.collectDiagnostics.title": "收集工作区索引诊断信息",
   "commands.showMenu.title": "打开管理菜单",
   "config.title": "语义搜索",

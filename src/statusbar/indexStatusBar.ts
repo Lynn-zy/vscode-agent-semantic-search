@@ -7,6 +7,7 @@ import * as vscode from "vscode";
 import {
   COMMAND_BUILD_INDEX,
   COMMAND_COLLECT_DIAGNOSTICS,
+  COMMAND_RESET_INDEX_CACHE,
   COMMAND_SHOW_MENU,
   STATUS_BAR_ALIGNMENT_PRIORITY,
 } from "../constants";
@@ -21,7 +22,7 @@ export type StatusBarState = "idle" | "indexing";
  * 快速选择菜单项接口定义
  */
 interface ManagementMenuItem extends vscode.QuickPickItem {
-  readonly id: "buildIndex" | "diagnostics" | "settings";
+  readonly id: "buildIndex" | "resetIndexCache" | "diagnostics" | "settings";
 }
 
 /**
@@ -99,6 +100,13 @@ export class IndexStatusBar implements vscode.Disposable {
           ),
         },
         {
+          id: "resetIndexCache",
+          label: `$(trash) ${vscode.l10n.t("Reset Remote Index Cache")}`,
+          description: vscode.l10n.t(
+            "Clear remote cached codebase index for rebuilding",
+          ),
+        },
+        {
           id: "diagnostics",
           label: `$(output) ${vscode.l10n.t("Collect Index Diagnostics")}`,
           description: vscode.l10n.t(
@@ -126,6 +134,9 @@ export class IndexStatusBar implements vscode.Disposable {
       switch (selected.id) {
         case "buildIndex":
           await vscode.commands.executeCommand(COMMAND_BUILD_INDEX);
+          break;
+        case "resetIndexCache":
+          await vscode.commands.executeCommand(COMMAND_RESET_INDEX_CACHE);
           break;
         case "diagnostics":
           await vscode.commands.executeCommand(COMMAND_COLLECT_DIAGNOSTICS);

@@ -2,7 +2,7 @@
   "name": "vscode-agent-semantic-search",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "publisher": "Lynn-zy",
   "author": "Lynn-zy",
   "license": "MIT",
@@ -79,6 +79,11 @@
       {
         "command": "semanticSearch.buildIndex",
         "title": "%commands.buildIndex.title%",
+        "category": "%commands.category%"
+      },
+      {
+        "command": "semanticSearch.resetIndexCache",
+        "title": "%commands.resetIndexCache.title%",
         "category": "%commands.category%"
       },
       {
