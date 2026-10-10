@@ -7,8 +7,12 @@ tsconfig.json
 node_modules/**
 
 # 开发侧文档与仓库元数据：仅服务于仓库内开发，不随扩展分发到用户机器
+.github/**
 .gitignore
 AGENTS.md
 GLOSSARY.md
+skills-lock.json
+.agents/**
+*.vsix
 docs/**
 test/**

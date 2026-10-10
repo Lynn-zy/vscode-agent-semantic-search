@@ -1,0 +1,6 @@
+{
+  "name": "vscode",
+  "version": "1.90.0",
+  "main": "./vscode.cjs",
+  "type": "commonjs"
+}

@@ -129,12 +129,15 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "npm run compile && node --test test/*.test.mjs"
+    "test": "npm run compile && node --test test/*.test.mjs",
+    "package": "vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
     "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^4.0.0",
     "prettier": "^3.9.8",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vscode": "file:test/mocks"
   }
 }
