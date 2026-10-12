@@ -176,7 +176,7 @@ test("ResetIndexCache 4: 当状态栏处于 indexing 构建中状态时，互斥
   }
 });
 
-test("ResetIndexCache 5: 底层抛出异常时安全捕获并复位状态栏为 idle", async () => {
+test("ResetIndexCache 5: 底层抛出异常时安全捕获并保持状态栏状态，不导致崩溃", async () => {
   vscode.commands._clear();
 
   const statusBar = new IndexStatusBar();
@@ -204,7 +204,47 @@ test("ResetIndexCache 5: 底层抛出异常时安全捕获并复位状态栏为 
     assert.equal(
       statusBar.state,
       "idle",
-      "底层异常发生后状态栏必须安全复位为 idle",
+      "底层异常发生后状态栏必须安全保持为 idle",
+    );
+  } finally {
+    commandDisposable.dispose();
+    statusBar.dispose();
+  }
+});
+
+test("ResetIndexCache 6: 完成重置索引缓存操作时应完全静默，严禁调用 statusBar.updateState 触发状态栏刷新与就绪气泡", async () => {
+  vscode.commands._clear();
+
+  const statusBar = new IndexStatusBar();
+  const logger = new LogService("Test");
+
+  let updateStateCalled = false;
+  const originalUpdateState = statusBar.updateState.bind(statusBar);
+  statusBar.updateState = (...args) => {
+    updateStateCalled = true;
+    return originalUpdateState(...args);
+  };
+
+  const commandHost = {
+    async listCommands() {
+      return [...DELETE_INDEX_CACHE_COMMAND_CANDIDATES];
+    },
+    async executeCommand() {},
+  };
+
+  const commandDisposable = registerResetIndexCacheCommand(
+    commandHost,
+    logger,
+    statusBar,
+  );
+
+  try {
+    await vscode.commands.executeCommand(COMMAND_RESET_INDEX_CACHE);
+
+    assert.equal(
+      updateStateCalled,
+      false,
+      "完成重置索引缓存操作后严禁调用 statusBar.updateState，避免触发就绪气泡提示",
     );
   } finally {
     commandDisposable.dispose();

@@ -92,9 +92,8 @@ export function registerResetIndexCacheCommand(
         logger.error(msg, error);
         void vscode.window.showErrorMessage(msg);
       } finally {
-        // 5. 退出执行锁，并保证状态栏保持/复位为 idle 就绪态
+        // 5. 退出执行锁（纯后台静默完成，不主动触发状态栏刷新与就绪气泡提示）
         isResetting = false;
-        statusBar?.updateState("idle");
       }
     },
   );
