@@ -73,6 +73,11 @@ export const MAX_TIMEOUT_MILLISECONDS = 180000;
 export const STATUS_BAR_ALIGNMENT_PRIORITY = 100;
 
 /**
+ * 默认显示语言设置（跟随 VS Code 全局界面语言）
+ */
+export const DEFAULT_DISPLAY_LANGUAGE = "auto";
+
+/**
  * 检索命中后可选追加的符号引用工具操作指引（面向 Agent 模型，统一采用英文）
  */
 export const CODE_USAGES_HINT_FOR_AGENT =

@@ -11,6 +11,7 @@ import {
 import { CommandHost } from "../relay/ports";
 import { LogService } from "../log/output";
 import { IndexStatusBar } from "../statusbar/indexStatusBar";
+import { l10n } from "../l10n/l10nService";
 
 /**
  * 注册重置远程索引缓存命令
@@ -38,7 +39,7 @@ export function registerResetIndexCacheCommand(
           "当前工作区代码库索引正在构建中，互斥拦截重置索引缓存操作。",
         );
         void vscode.window.showWarningMessage(
-          vscode.l10n.t(
+          l10n.t(
             "Cannot reset index cache while codebase index is currently building.",
           ),
         );
@@ -49,17 +50,18 @@ export function registerResetIndexCacheCommand(
       if (isResetting) {
         logger.warn("已有执行中的重置索引缓存任务，已忽略本次重复触发。");
         void vscode.window.showInformationMessage(
-          vscode.l10n.t(
-            "Codebase index cache is currently resetting, please wait...",
-          ),
+          l10n.t("Codebase index cache is currently resetting, please wait..."),
         );
         return;
       }
 
       isResetting = true;
 
+      // 3. 静默清空状态栏 Tooltip，避免菜单关闭后焦点复位自动弹出悬停提示
+      statusBar?.clearTooltip();
+
       try {
-        // 3. 探测环境中匹配的底层 Copilot 删除远程索引命令候选
+        // 4. 探测环境中匹配的底层 Copilot 删除远程索引命令候选
         const registeredCommands = await commandHost.listCommands();
         const matchedCommand = DELETE_INDEX_CACHE_COMMAND_CANDIDATES.find(
           (cmd) => registeredCommands.includes(cmd),
@@ -68,7 +70,7 @@ export function registerResetIndexCacheCommand(
         if (!matchedCommand) {
           const candidatesStr =
             DELETE_INDEX_CACHE_COMMAND_CANDIDATES.join(" | ");
-          const warning = vscode.l10n.t(
+          const warning = l10n.t(
             "Could not find Copilot index delete command ({0}). Please ensure GitHub Copilot is installed and active.",
             candidatesStr,
           );
@@ -85,10 +87,7 @@ export function registerResetIndexCacheCommand(
         logger.info("底层代码库索引缓存重置任务已完成。");
       } catch (error) {
         const errStr = error instanceof Error ? error.message : String(error);
-        const msg = vscode.l10n.t(
-          "Error while resetting index cache: {0}",
-          errStr,
-        );
+        const msg = l10n.t("Error while resetting index cache: {0}", errStr);
         logger.error(msg, error);
         void vscode.window.showErrorMessage(msg);
       } finally {

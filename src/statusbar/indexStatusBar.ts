@@ -12,6 +12,7 @@ import {
   STATUS_BAR_ALIGNMENT_PRIORITY,
 } from "../constants";
 import { ConfigService } from "../config/configService";
+import { l10n } from "../l10n/l10nService";
 
 /**
  * 状态栏状态枚举：仅保留就绪态与构建中态
@@ -68,21 +69,28 @@ export class IndexStatusBar implements vscode.Disposable {
 
     switch (this.currentState) {
       case "indexing":
-        this.statusBarItem.text = `$(sync~spin) ${vscode.l10n.t("Semantic Search: Indexing...")}`;
-        this.statusBarItem.tooltip = vscode.l10n.t(
+        this.statusBarItem.text = `$(sync~spin) ${l10n.t("Semantic Search: Indexing...")}`;
+        this.statusBarItem.tooltip = l10n.t(
           "Building codebase index, please wait...",
         );
         break;
       case "idle":
       default:
-        this.statusBarItem.text = `$(search) ${vscode.l10n.t("Semantic Search")}`;
-        this.statusBarItem.tooltip = vscode.l10n.t(
-          "Agent semantic search is ready. Click to open management menu.",
+        this.statusBarItem.text = `$(search) ${l10n.t("Semantic Search")}`;
+        this.statusBarItem.tooltip = l10n.t(
+          "Semantic Search: Click to open management menu.",
         );
         break;
     }
 
     this.statusBarItem.show();
+  }
+
+  /**
+   * 清空状态栏悬停提示，避免静默命令完成后焦点复位自动弹出 Tooltip
+   */
+  public clearTooltip(): void {
+    this.statusBarItem.tooltip = undefined;
   }
 
   /**
@@ -94,37 +102,37 @@ export class IndexStatusBar implements vscode.Disposable {
       const items: ManagementMenuItem[] = [
         {
           id: "buildIndex",
-          label: `$(database) ${vscode.l10n.t("Build Codebase Index")}`,
-          description: vscode.l10n.t(
+          label: `$(database) ${l10n.t("Build Codebase Index")}`,
+          description: l10n.t(
             "Trigger Copilot to build codebase semantic index",
           ),
         },
         {
           id: "resetIndexCache",
-          label: `$(trash) ${vscode.l10n.t("Reset Remote Index Cache")}`,
-          description: vscode.l10n.t(
+          label: `$(trash) ${l10n.t("Reset Remote Index Cache")}`,
+          description: l10n.t(
             "Clear remote cached codebase index for rebuilding",
           ),
         },
         {
           id: "diagnostics",
-          label: `$(output) ${vscode.l10n.t("Collect Index Diagnostics")}`,
-          description: vscode.l10n.t(
+          label: `$(output) ${l10n.t("Collect Index Diagnostics")}`,
+          description: l10n.t(
             "View language model tools status and diagnostic report",
           ),
         },
         {
           id: "settings",
-          label: `$(gear) ${vscode.l10n.t("Open Semantic Search Settings")}`,
-          description: vscode.l10n.t(
+          label: `$(gear) ${l10n.t("Open Semantic Search Settings")}`,
+          description: l10n.t(
             "Configure timeout, degradation hints and relay target",
           ),
         },
       ];
 
       const selected = await vscode.window.showQuickPick(items, {
-        title: vscode.l10n.t("Semantic Search Management"),
-        placeHolder: vscode.l10n.t("Select an action to perform"),
+        title: l10n.t("Semantic Search Management"),
+        placeHolder: l10n.t("Select an action to perform"),
       });
 
       if (!selected) {

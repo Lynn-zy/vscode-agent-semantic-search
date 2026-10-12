@@ -12,6 +12,7 @@ import {
 import { CommandHost } from "../relay/ports";
 import { LogService } from "../log/output";
 import { ConfigService } from "../config/configService";
+import { l10n } from "../l10n/l10nService";
 
 /**
  * 注册收集索引诊断信息命令
@@ -60,17 +61,14 @@ export function registerDiagnosticsCommand(
         logger.show();
 
         void vscode.window.showInformationMessage(
-          vscode.l10n.t(
+          l10n.t(
             "Local environment diagnostic report has been generated in output channel 'Agent Semantic Search'.",
           ),
         );
       } catch (error) {
         // 捕获异常并调用 l10n 国际化接口生成弹窗错误提示
         const errStr = error instanceof Error ? error.message : String(error);
-        const msg = vscode.l10n.t(
-          "Error while collecting diagnostics: {0}",
-          errStr,
-        );
+        const msg = l10n.t("Error while collecting diagnostics: {0}", errStr);
         logger.error(msg, error);
         void vscode.window.showErrorMessage(msg);
       }

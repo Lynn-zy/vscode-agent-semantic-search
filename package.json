@@ -2,7 +2,7 @@
   "name": "vscode-agent-semantic-search",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "Lynn-zy",
   "author": "Lynn-zy",
   "license": "MIT",
@@ -100,6 +100,21 @@
     "configuration": {
       "title": "%config.title%",
       "properties": {
+        "semanticSearch.displayLanguage": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "zh-cn",
+            "en"
+          ],
+          "enumDescriptions": [
+            "%config.displayLanguage.enumDescriptions.auto%",
+            "%config.displayLanguage.enumDescriptions.zh-cn%",
+            "%config.displayLanguage.enumDescriptions.en%"
+          ],
+          "default": "auto",
+          "description": "%config.displayLanguage.description%"
+        },
         "semanticSearch.statusBar.enabled": {
           "type": "boolean",
           "default": true,

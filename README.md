@@ -61,6 +61,7 @@ In standard VS Code, the native `semantic_search` tool is restricted to first-pa
      - `Semantic Search: Open Management Menu`
 
 4. **Highly Configurable**:
+   - `semanticSearch.displayLanguage`: UI display language for the extension (`auto`: follow VS Code | `zh-cn`: Simplified Chinese | `en`: English, default `auto`). Supports instant hot-reloading.
    - `semanticSearch.timeoutMs`: Timeout threshold for single relay search (default `45000` ms).
    - `semanticSearch.statusBar.enabled`: Toggle status bar entry visibility.
    - `semanticSearch.showDegradationHints`: Toggle whether to append fallback suggestions on empty or failed searches.
@@ -153,6 +154,7 @@ To allow your AI Agent to autonomously use this tool, you must enable it in the 
      - `语义搜索：打开管理菜单`
 
 4. **高度可配置**：
+   - `semanticSearch.displayLanguage`：插件 UI 界面显示语言（`auto`：跟随 VS Code 界面语言 | `zh-cn`：简体中文 | `en`：英文，默认 `auto`）。切换后即时热重载生效。
    - `semanticSearch.timeoutMs`：自定义单次检索超时（默认 45000 毫秒）。
    - `semanticSearch.statusBar.enabled`：状态栏图标显隐。
    - `semanticSearch.showDegradationHints`：结果为空或检索失败时，是否向模型附带下一步排查与降级建议。

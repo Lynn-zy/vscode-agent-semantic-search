@@ -11,6 +11,7 @@ import {
 import { CommandHost } from "../relay/ports";
 import { LogService } from "../log/output";
 import { IndexStatusBar } from "../statusbar/indexStatusBar";
+import { l10n } from "../l10n/l10nService";
 
 /**
  * 注册构建索引命令
@@ -32,7 +33,7 @@ export function registerBuildIndexCommand(
     if (isBuilding) {
       logger.warn("已有执行中的代码库索引构建任务，已忽略本次重复触发。");
       void vscode.window.showInformationMessage(
-        vscode.l10n.t("Codebase index is currently building, please wait..."),
+        l10n.t("Codebase index is currently building, please wait..."),
       );
       return;
     }
@@ -48,7 +49,7 @@ export function registerBuildIndexCommand(
 
       if (!matchedCommand) {
         const candidatesStr = BUILD_INDEX_COMMAND_CANDIDATES.join(" | ");
-        const warning = vscode.l10n.t(
+        const warning = l10n.t(
           "Could not find Copilot index build command ({0}). Please ensure GitHub Copilot is installed and active.",
           candidatesStr,
         );
@@ -64,10 +65,7 @@ export function registerBuildIndexCommand(
       logger.info("底层代码库索引构建任务已完成。");
     } catch (error) {
       const errStr = error instanceof Error ? error.message : String(error);
-      const msg = vscode.l10n.t(
-        "Error while triggering index build: {0}",
-        errStr,
-      );
+      const msg = l10n.t("Error while triggering index build: {0}", errStr);
       logger.error(msg, error);
       void vscode.window.showErrorMessage(msg);
     } finally {

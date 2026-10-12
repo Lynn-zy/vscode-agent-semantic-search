@@ -74,9 +74,19 @@ export type SearchOutcome =
     };
 
 /**
+ * 插件 UI 显示语言选项枚举
+ */
+export type DisplayLanguage = "auto" | "zh-cn" | "en";
+
+/**
  * 插件用户配置数据快照接口
  */
 export interface ExtensionConfig {
+  /**
+   * 插件 UI 显示语言设置（"auto" 跟随系统 | "zh-cn" 简体中文 | "en" 英文）
+   */
+  readonly displayLanguage: DisplayLanguage;
+
   /**
    * 单次检索的超时阈值（毫秒）
    */

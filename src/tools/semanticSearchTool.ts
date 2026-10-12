@@ -9,6 +9,7 @@ import { ConfigService } from "../config/configService";
 import { SemanticSearchRelay } from "../relay/semanticSearchRelay";
 import { presentOutcome } from "../relay/outcomePresenter";
 import { CODE_USAGES_HINT_FOR_AGENT } from "../constants";
+import { l10n } from "../l10n/l10nService";
 
 /**
  * 语义检索工具类：实现 VS Code LanguageModelTool 规范接口
@@ -93,7 +94,7 @@ export class SemanticSearchTool implements vscode.LanguageModelTool<SemanticSear
     const query = (options.input?.query ?? "").trim();
     return {
       invocationMessage: new vscode.MarkdownString(
-        vscode.l10n.t("Searching workspace: `{0}`", query || "..."),
+        l10n.t("Searching workspace: `{0}`", query || "..."),
       ),
     };
   }

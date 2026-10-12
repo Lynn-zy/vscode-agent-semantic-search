@@ -246,6 +246,11 @@ test("ResetIndexCache 6: 完成重置索引缓存操作时应完全静默，严�
       false,
       "完成重置索引缓存操作后严禁调用 statusBar.updateState，避免触发就绪气泡提示",
     );
+    assert.equal(
+      statusBar.statusBarItem.tooltip,
+      undefined,
+      "重置操作开始后应清空 Tooltip，防止菜单关闭焦点复位时自动弹窗",
+    );
   } finally {
     commandDisposable.dispose();
     statusBar.dispose();

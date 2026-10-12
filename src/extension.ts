@@ -51,10 +51,13 @@ export function activate(context: vscode.ExtensionContext): void {
   );
   context.subscriptions.push(registerDiagnosticsCommand(commandHost, logger));
 
-  // 6. 监听配置项变更以动态刷新状态栏显示
+  // 6. 监听配置项变更以动态刷新状态栏显示与多语言热重载
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
-      if (event.affectsConfiguration("semanticSearch.statusBar.enabled")) {
+      if (
+        event.affectsConfiguration("semanticSearch.statusBar.enabled") ||
+        event.affectsConfiguration("semanticSearch.displayLanguage")
+      ) {
         statusBar.updateState();
       }
     }),

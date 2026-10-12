@@ -4,8 +4,9 @@
  */
 
 import * as vscode from "vscode";
-import { ExtensionConfig } from "../types";
+import { DisplayLanguage, ExtensionConfig } from "../types";
 import {
+  DEFAULT_DISPLAY_LANGUAGE,
   DEFAULT_RELAY_TOOL_ID,
   DEFAULT_TIMEOUT_MILLISECONDS,
   MAX_TIMEOUT_MILLISECONDS,
@@ -22,6 +23,15 @@ export class ConfigService {
    */
   public static getConfig(): ExtensionConfig {
     const configuration = vscode.workspace.getConfiguration("semanticSearch");
+
+    const rawLanguage = configuration.get<string>(
+      "displayLanguage",
+      DEFAULT_DISPLAY_LANGUAGE,
+    );
+    let displayLanguage: DisplayLanguage = "auto";
+    if (rawLanguage === "zh-cn" || rawLanguage === "en") {
+      displayLanguage = rawLanguage;
+    }
 
     const timeoutMs = configuration.get<number>(
       "timeoutMs",
@@ -51,6 +61,7 @@ export class ConfigService {
     );
 
     return {
+      displayLanguage,
       timeoutMs: clampedTimeoutMs,
       statusBarEnabled,
       showDegradationHints,

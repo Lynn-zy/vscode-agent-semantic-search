@@ -1,6 +1,7 @@
 {
   "Semantic Search": "语义搜索",
   "Semantic Search: Indexing...": "语义搜索: 构建索引中",
+  "Semantic Search: Click to open management menu.": "语义搜索：点击打开管理菜单。",
   "Agent semantic search is ready. Click to open management menu.": "Agent 语义检索就绪。点击打开管理菜单。",
   "Building codebase index, please wait...": "正在构建工作区代码库索引，请稍候...",
   "Semantic Search Management": "语义搜索管理菜单",
